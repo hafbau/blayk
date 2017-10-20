@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 
 // routing related
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 // redux store related imports
 import { Provider } from 'react-redux';
@@ -25,10 +25,6 @@ import './index.css';
 
 // Containers
 import Blayk from './containers/Blayk/'
-
-// Views
-import Login from './views/Login/';
-import Register from './containers/RegisterContainer/';
 
 import registerServiceWorker from './registerServiceWorker';
 
@@ -52,11 +48,9 @@ socket.on('connect', (x) => {
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
-            <Switch>
-                <Route exact path="/login" name="Login Page" component={Login} />
-                <Route exact path="/register" name="Register Page" component={Register} />
-                <Route path="/" name="Home" component={Blayk} />
-            </Switch>
+                
+            <Route component={Blayk} />
+        
         </BrowserRouter>
     </Provider>,
     document.getElementById('root')

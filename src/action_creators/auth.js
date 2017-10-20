@@ -1,4 +1,4 @@
-import authApi from "../api/auth";
+import auth from "auth";
 
 export function login(credential) {
     return function(dispatch) {
@@ -6,11 +6,11 @@ export function login(credential) {
             type: 'LOGIN_PENDING',
         });
 
-        return authApi.login(credential)
-        .then(({ body: { token, user } }) => {
+        return auth.loginWithEmailAndPassword(credential)
+        .then(user => {
             dispatch({
                 type: 'LOGIN_SUCCESS',
-                token,
+                token: auth.token,
                 user
             });
 
@@ -24,13 +24,13 @@ export function login(credential) {
     }
 }
 
-export function logout(token) {
+export function logout() {
     return function(dispatch) {
         dispatch({
             type: 'LOGOUT_PENDING',
         });
 
-        return authApi.logout(token)
+        return auth.logout()
         .then(({ body }) => {
             console.log("body", body)
             dispatch({
@@ -55,11 +55,11 @@ export function register(body) {
             type: 'REGISTER_PENDING',
         });
 
-        return authApi.register(body)
-        .then(({ body: { token, user } }) => {
+        return auth.registerWithEmailAndPassword(body)
+        .then(user => {
             dispatch({
                 type: 'REGISTER_SUCCESS',
-                token,
+                token: auth.token,
                 user
             });
 

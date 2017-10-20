@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "auth": "git+ssh://git@github.com:hafbau/auth.git",
     "bootstrap": "^4.0.0-alpha.6",
     "font-awesome": "^4.7.0",
     "node-sass-chokidar": "0.0.3",
@@ -36,27 +37,29 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-
   "apps": [
     {
       "name": "blayk",
-      "env": {
-        "COMMON_ENV_VAR": "true"
-      },
+      "script": "npm",
+      "args": "run start:production",
+      "exec_mode": "cluster",
+      "instances": 2,
       "env_production": {
         "NODE_ENV": "production"
       }
     }
   ],
- 
   "deploy": {
     "production": {
       "user": "sb",
       "host": "159.203.14.114",
       "ref": "origin/master",
-      "repo": "git@github.com:hafbau/autoTest-gui.git",
+      "repo": "git@github.com:hafbau/blayk.git",
       "path": "/home/sb/blayk",
-      "post-deploy": "npm install --production && npm run build && pm2 start node_modules/react-scripts/scripts/start.js --name 'blayk'"
+      "post-deploy": "npm install && pm2 startOrGracefulReload package.json --env production",
+      "env": {
+        "NODE_ENV": "production"
+      }
     }
   }
 }
