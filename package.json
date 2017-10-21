@@ -29,7 +29,7 @@
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
-    "start-js": "react-scripts start",
+    "start-js": "node_modules/.bin/react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "start:production": "npm run build && npm run start:prod",
     "start:prod": "NODE_ENV=production node server",
