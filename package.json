@@ -43,7 +43,7 @@
     {
       "name": "blayk",
       "script": "npm",
-      "args": "run start:production",
+      "args": "run start-js",
       "exec_mode": "cluster",
       "instances": 2,
       "env_production": {
