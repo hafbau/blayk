@@ -1,5 +1,6 @@
 import auth from "auth";
 
+auth.apiUrl = 'http://hafiz-sandbox.tillerdigital.ca/auth/v1';
 export function login(credential) {
     return function(dispatch) {
         dispatch({
