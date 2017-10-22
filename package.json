@@ -27,6 +27,7 @@
     "superagent": "^3.5.2"
   },
   "scripts": {
+    "prod-deploy": "pm2 deploy package.json production",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "node_modules/.bin/react-scripts start",
