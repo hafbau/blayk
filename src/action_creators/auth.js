@@ -8,7 +8,8 @@ export function login(credential) {
         });
 
         return auth.loginWithEmailAndPassword(credential)
-        .then(user => {
+            .then(user => {
+            console.log('user', user)
             dispatch({
                 type: 'LOGIN_SUCCESS',
                 token: auth.token,
