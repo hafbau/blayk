@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "auth": "git+ssh://git@github.com:hafbau/auth.git",
+    "auth": "git+ssh://git@github.com:hafbau/auth.git#fdb75b61b9294e85d50a572c446243463dbb8673",
     "bootstrap": "^4.0.0-alpha.6",
+    "cuid": "^1.3.8",
     "font-awesome": "^4.7.0",
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.0.2",

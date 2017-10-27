@@ -13,11 +13,11 @@ import Unauthenticated from '../../routes_container/Unauthenticated/';
 class App extends Component {
 
   componentDidMount() {
-    console.log("will mount", this.props)
     if (this.props.token) this.props.createListener(String(this.props.user.id), this.props.socket);
   }
-
+  
   render() {
+    console.log("in login render", this.props)
     // console.log("props in blayk", this.props)
     if (!this.props.token) return <Unauthenticated />
     return <Authenticated {...this.props} />

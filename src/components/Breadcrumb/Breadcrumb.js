@@ -20,7 +20,7 @@ const getPaths = (pathname) => {
 };
 
 const BreadcrumbsItem = ({...rest, match}) => {
-  const routeName = findRouteName(match.url);
+  const routeName = findRouteName(match.url) || null;
   if (routeName) {
     return (
       match.isExact ?

@@ -5,7 +5,9 @@ import { Container } from 'reactstrap';
 
 import CreateTest from '../../views/CreateTest';
 import Header from '../../components/Header/';
-import RunTest from '../../views/RunTest/';
+import AllTests from '../../views/AllTests/';
+import SingleSuite from '../../views/SingleSuite/';
+import SingleCase from '../../views/SingleCase/';
 import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
 import Footer from '../../components/Footer/';
@@ -23,9 +25,12 @@ function AuthenticatedRoutes(props) {
             <Container fluid>
               <Switch>
 
-                <Route path="/new" name="Create Test" render={() => <CreateTest {...props} />} />
-                <Route path="/tests" name="Run Test" render={() => <RunTest {...props} />} />
-                <Route exact path="/" name="Home" render={() => <CreateTest {...props} />}/>
+                <Route path="/new" name="Create Test" render={() => <CreateTest {...props} />} /> 
+                <Route name="All Tests" exact path="/tests" render={() => <AllTests {...props} />} />
+                <Route name="View Suite" exact path="/tests/:id" render={() => <SingleSuite {...props} />} />
+                <Route name="View Test Case" exact path="/tests/:suiteId/cases/:id" render={() => <SingleCase {...props} />} />
+                
+                <Route exact path="/" name="Home" render={() => <AllTests {...props} />}/>
                 <Route render={() => <Page404 {...props} />}/>
 
               </Switch>

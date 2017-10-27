@@ -9,7 +9,6 @@ export function login(credential) {
 
         return auth.loginWithEmailAndPassword(credential)
             .then(user => {
-            console.log('user', user)
             dispatch({
                 type: 'LOGIN_SUCCESS',
                 token: auth.token,
@@ -27,14 +26,13 @@ export function login(credential) {
 }
 
 export function logout() {
-    return function(dispatch) {
+    return function(dispatch, getState) {
         dispatch({
             type: 'LOGOUT_PENDING',
         });
-
-        return auth.logout()
+        const token = getState().token;
+        return auth.logout(token)
         .then(({ body }) => {
-            console.log("body", body)
             dispatch({
                 type: 'LOGOUT_SUCCESS',
                 token: "",

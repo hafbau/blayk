@@ -1,0 +1,6 @@
+{
+  "name": "AllTests",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./AllTests.js"
+}

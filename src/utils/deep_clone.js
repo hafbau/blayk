@@ -1,0 +1,1 @@
+export default (obj) => Object.assign({}, JSON.parse(JSON.stringify(obj)))

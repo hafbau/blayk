@@ -55,3 +55,56 @@
 .result-item {
     line-height: 2;
 }
+
+// AllTests View styles
+.tests {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.test {
+    margin: 0;
+    padding: 0;
+}
+
+.test > .card {
+    margin: 0;
+    border: none;
+    border-top: 0.5px solid #ddd;
+}
+
+.test > .card:hover {
+    background-color: #efe;
+}
+
+.test .card-body {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.left {
+    cursor: pointer;
+    flex: 1;
+    flex-basis: 65%;
+    padding: 1.25rem;
+}
+
+.right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    flex-basis: 35%;
+    max-width: 300px;
+}
+
+.test .right i {
+    cursor: pointer;
+    flex: 1
+}
+
+.test-name {
+    padding: 0 1.25rem;
+}
