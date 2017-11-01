@@ -38,7 +38,7 @@ class CreateTest extends Component {
     handleSubmit(e) {
         // TODO: validate form
         console.log("form", this.state.form, "token", this.props.token);
-        this.props.saveAndRun(this.state.form, this.props.token)
+        this.props.createSuite(this.state.form, this.props.token)
     }
 
     nextStep(step = 1) {

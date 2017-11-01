@@ -104,6 +104,96 @@ export default (state = initialState, action) => {
         /**
          * Test Related
          */
+        // create suite
+        case "CREATE_SUITE_FAILURE":
+            return {
+                ...state,
+                loading: false,
+                suite: {},
+                error: action.error
+            };
+        case "CREATE_SUITE_PENDING":
+            return {
+                ...state,
+                loading: true,
+                suite: {},
+                error: null
+            };
+        case "CREATE_SUITE_SUCCESS":
+            return {
+                ...state,
+                suite: action.suite,
+                loading: false,
+                error: null
+            };
+        
+        // get all suites
+        case "GET_ALL_SUITES_FAILURE":
+            return {
+                ...state,
+                loading: false,
+                suites: [],
+                error: action.error
+            };
+        case "GET_ALL_SUITES_PENDING":
+            return {
+                ...state,
+                loading: true,
+                suites: [],
+                error: null
+            };
+        case "GET_ALL_SUITES_SUCCESS":
+            return {
+                ...state,
+                suites: action.suite,
+                loading: false,
+                error: null
+            };
+        
+        // get a suite
+        case "GET_SUITE_FAILURE":
+            return {
+                ...state,
+                loading: false,
+                suite: [],
+                error: action.error
+            };
+        case "GET_SUITE_PENDING":
+            return {
+                ...state,
+                loading: true,
+                suite: [],
+                error: null
+            };
+        case "GET_SUITE_SUCCESS":
+            return {
+                ...state,
+                suite: action.suite,
+                loading: false,
+                error: null
+            };
+        
+        // save and run
+        case "RUN_CASE_FAILURE":
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            };
+        case "RUN_CASE_PENDING":
+            return {
+                ...state,
+                loading: true,
+                error: null
+            };
+        case "RUN_CASE_SUCCESS":
+            return {
+                ...state,
+                testCase: action.testCase,
+                loading: false,
+                error: null
+            };
+        
         // save and run
         case "SAVE_AND_RUN_FAILURE":
             return {
@@ -131,20 +221,43 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                testCase: null,
+                testCase: {},
                 error: action.error
             };
         case "UPDATE_CASE_PENDING":
             return {
                 ...state,
                 loading: true,
-                testCase: null,
+                testCase: {},
                 error: null
             };
         case "UPDATE_CASE_SUCCESS":
             return {
                 ...state,
                 testCase: action.testCase,
+                loading: false,
+                error: null
+            };
+
+        // update test suite
+        case "UPDATE_SUITE_FAILURE":
+            return {
+                ...state,
+                loading: false,
+                suite: {},
+                error: action.error
+            };
+        case "UPDATE_SUITE_PENDING":
+            return {
+                ...state,
+                loading: true,
+                suite: {},
+                error: null
+            };
+        case "UPDATE_SUITE_SUCCESS":
+            return {
+                ...state,
+                suite: action.suite,
                 loading: false,
                 error: null
             };
