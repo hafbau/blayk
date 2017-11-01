@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { logout } from '../../action_creators/auth';
-import { saveAndRun } from '../../action_creators/test';
+import { saveAndRun, updateCase } from '../../action_creators/test';
 
 import { createListener } from '../../listeners';
 import { bindActionCreators } from 'redux';
@@ -33,6 +33,7 @@ function mapDispatchToProps(dispatch) {
     createListener: bindActionCreators(createListener, dispatch),
     logout: bindActionCreators(logout, dispatch),
     saveAndRun: bindActionCreators(saveAndRun, dispatch),
+    updateCase: bindActionCreators(updateCase, dispatch),
   };
 }
 

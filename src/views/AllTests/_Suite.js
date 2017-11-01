@@ -20,8 +20,8 @@ export default (props) => {
                 </Link>
                 <div className='right'>
                     <i className="fa fa-play" aria-hidden="true" onClick={() => props.runSuite()}></i>
-                    <i className="fa fa-clone" aria-hidden="true" onClick={() => props.duplicateSuite()}></i>
-                    <i className="fa fa-trash" aria-hidden="true" onClick={() => props.deleteSuite()}></i>
+                    <i className="fa fa-clone" aria-hidden="true" onClick={() => props.duplicateSuite(suite)}></i>
+                    <i className="fa fa-trash" aria-hidden="true" onClick={() => props.deleteSuite(suite)}></i>
                 </div>
             </CardBlock>
         </Card>

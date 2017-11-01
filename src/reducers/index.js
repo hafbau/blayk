@@ -1,9 +1,11 @@
 const initialState = {
     // data
     token: '',
-    user: {
-
-    },
+    user: {},
+    suites: [],
+    testCases: [],
+    suite: {},
+    testCase: {},
     error: null,
 
     // UI state
@@ -121,6 +123,29 @@ export default (state = initialState, action) => {
                 ...state,
                 results: action.results,
                 running: false,
+                error: null
+            };
+        
+        // update test case
+        case "UPDATE_CASE_FAILURE":
+            return {
+                ...state,
+                loading: false,
+                testCase: null,
+                error: action.error
+            };
+        case "UPDATE_CASE_PENDING":
+            return {
+                ...state,
+                loading: true,
+                testCase: null,
+                error: null
+            };
+        case "UPDATE_CASE_SUCCESS":
+            return {
+                ...state,
+                testCase: action.testCase,
+                loading: false,
                 error: null
             };
 

@@ -19,6 +19,19 @@ class SingleCase extends Component {
         };   
     }
 
+    add() {
+        const testCase = deepClone(this.state.testCase);
+        const newStep = {
+            order: testCase.steps.length,
+            options: {},
+            target: {},
+        }
+
+        testCase.steps.push(newStep);
+        this.setState(prevState => Object.assign({}, prevState, { testCase }));
+        return false;
+    }
+
     deleteStep(order) {
         const testCase = deepClone(this.state.testCase);
         const newSteps = testCase.steps
@@ -41,7 +54,6 @@ class SingleCase extends Component {
     
     handleChange({ target: { name, value } }) {
         const testCase = set(deepClone(this.state.testCase), name, value);
-        console.log('new testCase', testCase)
         this.setState(prevState => Object.assign({}, prevState, { testCase }));
         return false;
     }
@@ -61,6 +73,11 @@ class SingleCase extends Component {
         }
         this.setState(prevState => Object.assign({}, prevState, { testCase }));
         return false;
+    }
+
+    update() {
+        if (typeof this.props.updateCase === 'function') this.props.updateCase(this.state.testCase);
+        return false
     }
 
     render() {
@@ -92,6 +109,7 @@ class SingleCase extends Component {
                                 type="submit"
                                 size="md"
                                 color="primary"
+                                onClick={() => this.add()}
                             >Add</Button>
                             <Button
                                 style={{ marginLeft: 'auto', flex: '0.4' }}
@@ -123,6 +141,7 @@ class SingleCase extends Component {
                     type="submit"
                     size="md"
                     color="primary"
+                    onClick={() => this.add()}    
                     >Add</Button>
                     <Button
                     className="float-right"

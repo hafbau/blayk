@@ -19,12 +19,11 @@ export default (props) => {
                     <span className="test-name">{testCase.title}</span>
                 </Link>
                 <div className='right'>
-                    <i className="fa fa-pencil" aria-hidden="true" onClick={() => props.editTestCase()}></i>
                     <i className="fa fa-play" aria-hidden="true" onClick={() => props.runTestCase()}></i>
-                    <i className="fa fa-clone" aria-hidden="true" onClick={() => props.duplicateTestCase()}></i>
-                    <i className="fa fa-arrow-up" aria-hidden="true" onClick={() => props.moveUp()}></i>
-                    <i className="fa fa-arrow-down" aria-hidden="true" onClick={() => props.moveDown()}></i>
-                    <i className="fa fa-trash" aria-hidden="true" onClick={() => props.deleteTestCase()}></i>
+                    <i className="fa fa-clone" aria-hidden="true" onClick={() => props.duplicateTestCase(testCase)}></i>
+                    <i className="fa fa-arrow-up" aria-hidden="true" onClick={() => props.move(testCase.order, -1)}></i>
+                    <i className="fa fa-arrow-down" aria-hidden="true" onClick={() => props.move(testCase.order, 1)}></i>
+                    <i className="fa fa-trash" aria-hidden="true" onClick={() => props.deleteTestCase(testCase.order)}></i>
                 </div>
             </CardBlock>
         </Card>

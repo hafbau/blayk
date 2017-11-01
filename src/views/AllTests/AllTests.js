@@ -13,12 +13,20 @@ class AllTests extends Component {
     constructor(props) {
         super(props)
         this.state = {
-
+            suites: this.props.tests || fakeSuites
         };   
     }
 
+    deleteSuite(suite) {
+
+    }
+
+    duplicateSuite(suite) {
+
+    }
+
     render() {
-        const suites = this.props.tests || fakeSuites;
+        const suites = this.state.suites;
 
         return (
             <div className="animated fadeIn">
@@ -26,7 +34,12 @@ class AllTests extends Component {
                 <Row>
                     <Col>
                         <ul className="tests">
-                            {suites.map(suite => <Suite key={suite._id} suite={suite} />)}
+                            {suites.map(suite => <Suite
+                                key={suite._id}
+                                suite={suite}
+                                deleteSuite={(suite) => this.props.deleteSuite(suite)}
+                                duplicateSuite={(suite) => this.props.duplicateSuite(suite)}
+                            />)}
                         </ul>    
                     </Col>
                 </Row>

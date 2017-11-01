@@ -5,6 +5,7 @@ export default [
         cases: [
             {
                 _id: '1',
+                order: '1',
                 title: 'Sucessful login',
                 steps: [
                     {
@@ -128,6 +129,7 @@ export default [
             },
             {
                 _id: '2',
+                order: '2',
                 title: 'Unsucessful login',
                 steps: [
 
@@ -135,6 +137,7 @@ export default [
             },
             {
                 _id: '3',
+                order: '3',
                 title: 'Sucessful logout',
                 steps: [
 
@@ -149,6 +152,7 @@ export default [
         cases: [
             {
                 _id: '1',
+                order: '1',
                 title: 'Sucessful create test',
                 steps: [
 
@@ -156,6 +160,7 @@ export default [
             },
             {
                 _id: '2',
+                order: '2',
                 title: 'Unsucessful create test',
                 steps: [
 
@@ -169,6 +174,7 @@ export default [
         cases: [
             {
                 _id: '1',
+                order: '1',
                 title: 'Sucessful run test',
                 steps: [
 
@@ -176,6 +182,7 @@ export default [
             },
             {
                 _id: '2',
+                order: '2',
                 title: 'Unsucessful run test',
                 steps: [
 
@@ -189,6 +196,7 @@ export default [
         cases: [
             {
                 _id: '1',
+                order: '1',
                 title: 'View test',
                 steps: [
 
@@ -196,6 +204,7 @@ export default [
             },
             {
                 _id: '2',
+                order: '2',
                 title: 'Edit test',
                 steps: [
 
@@ -209,6 +218,7 @@ export default [
         cases: [
             {
                 _id: '1',
+                order: '1',
                 title: 'Sucessful schedule test',
                 steps: [
 
@@ -216,6 +226,7 @@ export default [
             },
             {
                 _id: '2',
+                order: '2',
                 title: 'Unsucessful schedule test',
                 steps: [
 
