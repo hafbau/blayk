@@ -45,7 +45,7 @@ export default {
     },
 
     updateSuite(body, token) {
-        return fetch.put(`${config.API_PATH}/tests/${body._id}}`)
+        return fetch.put(`${config.API_PATH}/tests/${body._id}`)
             .send(body)
             .type('json')
             .set('x-access-token', token)

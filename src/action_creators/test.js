@@ -7,11 +7,11 @@ export function createSuite(body, token) {
         });
 
         return testApi.createSuite(body, token)
-        .then(({ body }) => {
-            console.log("suite created", body)
+            .then(({ body: { suite } }) => {
+            console.log("suite created", suite)
             dispatch({
                 type: 'CREATE_SUITE_SUCCESS',
-                suite: body
+                suite
             });
 
         })
@@ -31,11 +31,11 @@ export function getAllSuites() {
         });
 
         return testApi.getAllSuites(getState().token)
-        .then(({ body }) => {
-            console.log("all suites gotten", body)
+        .then(({ body: { suites } }) => {
+            console.log("all suites gotten", suites)
             dispatch({
                 type: 'GET_ALL_SUITES_SUCCESS',
-                suites: body
+                suites
             });
 
         })
@@ -49,17 +49,17 @@ export function getAllSuites() {
 }
 
 export function getSuite(_id, token) {
-    return function(dispatch) {
+    return function(dispatch, getState) {
         dispatch({
             type: 'GET_SUITE_PENDING',
         });
 
-        return testApi.getSuite(_id, token)
-        .then(({ body }) => {
-            console.log("got a suite", body)
+        return testApi.getSuite(_id, getState().token)
+        .then(({ body: { suite } }) => {
+            console.log("got a suite", suite)
             dispatch({
                 type: 'GET_SUITE_SUCCESS',
-                suite: body
+                suite
             });
 
         })
@@ -103,11 +103,11 @@ export function updateSuite(body) {
         });
 
         return testApi.updateSuite(body, getState().token)
-        .then(({ body }) => {
-            console.log("suite updated", body)
+        .then(({ body: { suite } }) => {
+            console.log("suite updated", suite)
             dispatch({
                 type: 'UPDATE_SUITE_SUCCESS',
-                suite: body
+                suite
             });
 
         })

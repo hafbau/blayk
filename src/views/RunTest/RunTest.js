@@ -12,14 +12,11 @@ import {
 
 import { MediaPanel, RunState } from '../../components';
 
-// for dev testing
-// import { fakeCase, fakeRun } from '../../api';
-
 class RunTest extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            case: this.props.runningCase,// || fakeCase, // fakeCase to be removed post dev test
+            case: this.props.location.state ? this.props.location.state.testCase : null,// || fakeCase, // fakeCase to be removed post dev test
             results: []
         };
 
@@ -27,11 +24,9 @@ class RunTest extends Component {
     }
 
     componentDidMount() {
-        if (this.state.case && !this.props.running) {
-            // bind props.run from app container `Blayk`
-            if (typeof this.props.run === "function") this.props.run(this.state.case)
-            // fakeRun(this.state.case, (result, status) => this.handleResult(result, status)) // fakeRun to be removed
-    
+        if (this.state.case && !this.props.loading) {
+            const { order, suite: { id } } = this.state.case;
+            if (order && id) this.props.runCase(id, order);
         }
     }
 
@@ -78,7 +73,7 @@ class RunTest extends Component {
     render() {
         const caseToRun = this.state.case;
         const { result, results, status } = this.state;
-        const isRunning = this.props.running// || (status !== "done" && status !== "failed");
+        const isRunning = this.props.loading// || (status !== "done" && status !== "failed");
         console.log("props in runTest", this.props);
         console.log("state in runTest", this.state);
 
@@ -140,7 +135,7 @@ class RunTest extends Component {
                     <Col xs="12" sm="12" md="6" lg="6">
                         <MediaPanel
                             image={result && result.image}
-                            images={results && results.map(result => result.imageDataUrl)}/>
+                            images={results && results.map(result => result.meta.imageDataUrl)}/>
                     </Col>
                 </Row>}
             </div>

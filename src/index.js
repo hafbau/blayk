@@ -25,9 +25,7 @@ import './index.css';
 
 // Containers
 import Blayk from './containers/Blayk/'
-
 import registerServiceWorker from './registerServiceWorker';
-
 import config from './config';
 
 // TODO: move this to seperate file
@@ -36,25 +34,25 @@ const store = compose(
     autoRehydrate()
 )(createStore)(reducer);
 
-persistStore(store);
-
-// websocket connection
-console.log("api path", config.API_PATH)
-const socket = io.connect(config.API_PATH, { transports: ['websocket'], upgrade: false });
-socket.on('connect', (x) => {
-    store.dispatch({ type: 'HAS_SOCKET', socket })
+persistStore(store, { whitelist: ['token', 'user'], keyPrefix: "blayk" }, () => {
+    if (store.getState().token) {
+        // websocket connection
+        const socket = io.connect(config.API_PATH, { transports: ['websocket'], upgrade: false });
+        socket.on('connect', (x) => {
+            store.dispatch({ type: 'HAS_SOCKET', socket })
+        });
+    }
+    ReactDOM.render(
+        <Provider store={store}>
+            <BrowserRouter>
+                    
+                <Route component={Blayk} />
+            
+            </BrowserRouter>
+        </Provider>,
+        document.getElementById('root')
+    );
 });
-
-ReactDOM.render(
-    <Provider store={store}>
-        <BrowserRouter>
-                
-            <Route component={Blayk} />
-        
-        </BrowserRouter>
-    </Provider>,
-    document.getElementById('root')
-);
 
 // service worker offline first stuff
 registerServiceWorker();

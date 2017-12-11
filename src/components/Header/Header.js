@@ -56,7 +56,7 @@ class Header extends Component {
     return (
       <header className="app-header navbar">
         <NavbarToggler className="mobile-sidebar-toggler d-lg-none" onClick={this.mobileSidebarToggle}>&#9776;</NavbarToggler>
-        <NavbarBrand href="#"></NavbarBrand>
+        <NavbarBrand href="/"></NavbarBrand>
         <Nav className="navbar-nav d-md-down-none">
           <NavItem>
             <NavbarToggler className="nav-link sidebar-toggler" type="button"
@@ -78,7 +78,7 @@ class Header extends Component {
                 <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
                 <DropdownItem><i className="fa fa-file"></i> Test Suites<Badge color="primary">42</Badge></DropdownItem>
                 <DropdownItem divider/>
-                <DropdownItem onClick={() => this.handleLogout()}><i className="fa fa-lock"></i> Logout</DropdownItem>
+                <DropdownItem onClick={(e) => this.handleLogout(e)}><i className="fa fa-lock"></i> Logout</DropdownItem>
 
               </DropdownMenu>
             </Dropdown>

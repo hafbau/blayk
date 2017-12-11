@@ -35,11 +35,9 @@ class Login extends Component {
   }
 
   handleSubmit() {
-    console.log("form", this.state.form)
     this.props.login(this.state.form);
   }
   render() {
-    console.log("props in login", this.props)
     if (this.props.token) return <Redirect to="/" />
    
     return (

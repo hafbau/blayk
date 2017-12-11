@@ -145,7 +145,7 @@ export default (state = initialState, action) => {
         case "GET_ALL_SUITES_SUCCESS":
             return {
                 ...state,
-                suites: action.suite,
+                suites: action.suites,
                 loading: false,
                 error: null
             };
@@ -178,18 +178,21 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                error: action.error
+                error: action.error,
+                results: []
             };
         case "RUN_CASE_PENDING":
             return {
                 ...state,
                 loading: true,
-                error: null
+                error: null,
+                results: []
             };
         case "RUN_CASE_SUCCESS":
             return {
                 ...state,
                 testCase: action.testCase,
+                results: action.testCase.steps,
                 loading: false,
                 error: null
             };

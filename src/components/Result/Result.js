@@ -30,7 +30,7 @@ const ResultDetail = ({ results }) => {
                         <li className={`result-item`} key={index} >
                             <Row>
                                 <Col xs="12" sm="12" md="9" lg="9">
-                                    {index + 1}. &nbsp;{result.text || "Step description placeholder"}
+                                    {index + 1}. &nbsp;{formulateStepText(result) || "Step description placeholder"}
                                 </Col>
 
                                 <Col xs="12" sm="12" md="3" lg="3" >
@@ -55,4 +55,35 @@ const StatusIcon = ({ classNames, status }) => {
             <i className={`icon-${status === "done" ? "check pass" : "close fail"}`}></i>
         </div>
     )
+}
+
+const formulateStepText = ({ type, options, target }) => {
+
+    const action = {
+        'click': 'Click',
+        'get': 'Go to',
+        'sendKeys': 'Fill',
+        'textContains': 'Text',
+        'textNotContains': 'Text'
+    }[type];
+
+    switch (type) {
+        case 'click':
+            return `${action} ${target ? target.value : ''}`;
+        
+        case 'get':
+            return `${action} ${options ? options.value : ''}`;
+
+        case 'sendKeys':
+            return `${action} ${options ? options.value : ''} into ${target ? target.value : ''}`;
+
+        case 'textContains':
+            return `${action} in ${target ? target.value : ''} contains ${options ? options.value : ''}`;
+
+        case 'textNotContains':
+            return `${action} in ${target ? target.value : ''} does not contain ${options ? options.value : ''}`;
+        
+        default:
+            return 'performing unspecified action'    
+    }
 }

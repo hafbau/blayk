@@ -24,7 +24,8 @@ class AllTests extends Component {
             .map(s => s.order > order ? s.order-- && s : s);
 
         suite.cases = newTestCases;
-        this.setState(prevState => Object.assign({}, prevState, { suite }));
+        this.props.updateSuite(suite);
+        // this.setState(prevState => Object.assign({}, prevState, { suite }));
         return false;
     }
 
@@ -32,8 +33,22 @@ class AllTests extends Component {
         const suite = deepClone(this.state.suite);
         const newTestCase = Object.assign({}, deepClone(testCase), { order: suite.cases.length + 1 });
 
+        delete newTestCase.lastRun;
+        delete newTestCase.isPassing;
+        delete newTestCase.lastPassed;
+
+        newTestCase.title = newTestCase.title + 'copy';
+        newTestCase.createdAt = Date.now();
+        newTestCase.meta = {};
+
+        newTestCase.steps = newTestCase.steps.map(step => {
+            const { order, category, options, target, type } = step;
+            return { order, category, options, target, type };
+        });
+
         suite.cases.push(newTestCase)
-        this.setState(prevState => Object.assign({}, prevState, { suite }));
+        this.props.updateSuite(suite);
+        // this.setState(prevState => Object.assign({}, prevState, { suite }));
         return false;
     }
 
@@ -82,13 +97,14 @@ class AllTests extends Component {
                     <Col>
                         <ul className="tests">
                             {suite.cases.map(testCase => <Case
-                                key={cuid()}
-                                testCase={testCase}
-                                suiteId={suite._id}
                                 deleteTestCase={(step) => this.deleteTestCase(step)}
                                 duplicateTestCase ={(step) => this.duplicateTestCase (step)}
-                                move={(order, increment) => this.move(order, increment)}
                                 handleChange={(e) => this.handleChange(e)}
+                                key={cuid()}
+                                move={(order, increment) => this.move(order, increment)}
+                                runTestCase={(suiteId, order) => this.props.runCase(suiteId, order)}
+                                suiteId={suite._id}
+                                testCase={testCase}
                             />)}
                         </ul>    
                     </Col>

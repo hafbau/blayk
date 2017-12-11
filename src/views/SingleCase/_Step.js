@@ -12,6 +12,10 @@ import {
 export default (props) => {
     const step = props.step;
     const { options, order, target, type } = step;
+
+    const needsTarget = type !== 'get';
+    const needsValue = type !== 'click';
+
     return <li className="test">
         <Card>
             <CardBlock className={`card-body`}>
@@ -30,23 +34,23 @@ export default (props) => {
                                     <option value="click">Click</option>
                                     <option value="get">Go to</option>
                                     <option value="sendKeys">Fill value</option>
-                                    <option value="textContains">Text Contains</option>
-                                    <option value="textNotContains">Text does not Contain</option>
+                                    <option value="textContains">Text contains</option>
+                                    <option value="textNotContains">Text does not contain</option>
                                 </Input >
                             </FormGroup>
                         </Col>
-                        <Col xs="3">
+                        {needsValue && <Col xs="3">
                             <FormGroup>
                                 <Label htmlFor={`value-${order}`}>Value</Label>
                                 <Input
                                     onBlur={(e) => props.handleChange(e)}
                                     name={`steps.${order - 1}.options.value`} type="text" id={`value-${order}`}
                                     placeholder="Enter value here"
-                                    defaultValue={options.value}
+                                    defaultValue={options && options.value}
                                 />
                             </FormGroup>
-                        </Col>
-                        <Col xs="3">
+                        </Col>}
+                        {needsTarget && <Col xs="3">
                             <FormGroup>
                                 <Label htmlFor={`target-value-${order}`}>Target</Label>
                                 <Input
@@ -54,11 +58,11 @@ export default (props) => {
                                     name={`steps.${order - 1}.target.value`}
                                     type="text" id={`target-value-${order}`}
                                     placeholder="Enter target element here"
-                                    defaultValue={target.value}
+                                    defaultValue={target && target.value}
                                 />
                             </FormGroup>
-                        </Col>
-                        <Col xs="3">
+                        </Col>}
+                        {needsTarget && <Col xs="3">
                             <FormGroup>
                                 <Label htmlFor={`target-type-${order}`}>Selection Method</Label>
                                 <Input
@@ -67,7 +71,7 @@ export default (props) => {
                                     type="select"
                                     id={`target-type-${order}`}
                                     placeholder="Select target location method"
-                                    defaultValue={target.type}
+                                    defaultValue={target && target.type}
                                     required >
                                     <option value="default">Default</option>
                                     <option value="css">CSS</option>
@@ -76,7 +80,7 @@ export default (props) => {
                                     <option value="linkText">Link Text</option>
                                 </Input >
                             </FormGroup>
-                        </Col>
+                        </Col>}
                     </Row>
                 </div>
                 <div className='right'>

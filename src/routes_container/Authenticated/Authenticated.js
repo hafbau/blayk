@@ -1,16 +1,18 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-
 import { Container } from 'reactstrap';
 
-import CreateTest from '../../views/CreateTest';
-import Header from '../../components/Header/';
 import AllTests from '../../views/AllTests/';
-import SingleSuite from '../../views/SingleSuite/';
-import SingleCase from '../../views/SingleCase/';
-import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
+import CreateTest from '../../views/CreateTest';
+
 import Footer from '../../components/Footer/';
+import Header from '../../components/Header/';
+import RunTest from '../../views/RunTest/';
+
+import Sidebar from '../../components/Sidebar/';
+import SingleCase from '../../views/SingleCase/';
+import SingleSuite from '../../views/SingleSuite/';
 
 import Page404 from '../../views/Page404/';
 
@@ -29,6 +31,7 @@ function AuthenticatedRoutes(props) {
                 <Route name="All Tests" exact path="/tests" render={() => <AllTests {...props} />} />
                 <Route name="View Suite" exact path="/tests/:id" render={() => <SingleSuite {...props} />} />
                 <Route name="View Test Case" exact path="/tests/:suiteId/cases/:id" render={() => <SingleCase {...props} />} />
+                <Route name="Run Test Case" exact path="/tests/:suiteId/cases/:id/run" render={() => <RunTest {...props} />} />
                 
                 <Route exact path="/" name="Home" render={() => <AllTests {...props} />}/>
                 <Route render={() => <Page404 {...props} />}/>

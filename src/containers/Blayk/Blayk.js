@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 
 import { logout } from '../../action_creators/auth';
-import { saveAndRun, updateCase } from '../../action_creators/test';
+import {
+  createSuite,
+  getAllSuites,
+  getSuite,
+  runCase,
+  saveAndRun,
+  updateSuite
+} from '../../action_creators/test';
 
 import { createListener } from '../../listeners';
 import { bindActionCreators } from 'redux';
@@ -31,9 +38,13 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     createListener: bindActionCreators(createListener, dispatch),
+    createSuite: bindActionCreators(createSuite, dispatch),
+    getAllSuites: bindActionCreators(getAllSuites, dispatch),
+    getSuite: bindActionCreators(getSuite, dispatch),
     logout: bindActionCreators(logout, dispatch),
+    runCase: bindActionCreators(runCase, dispatch),
     saveAndRun: bindActionCreators(saveAndRun, dispatch),
-    updateCase: bindActionCreators(updateCase, dispatch),
+    updateSuite: bindActionCreators(updateSuite, dispatch),
   };
 }
 

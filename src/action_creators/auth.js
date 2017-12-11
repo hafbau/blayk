@@ -1,6 +1,6 @@
 import auth from "auth";
 
-auth.apiUrl = 'http://hafiz-sandbox.tillerdigital.ca/auth/v1';
+auth.apiUrl = 'http://localhost:4001'//'http://hafiz-sandbox.tillerdigital.ca/auth/v1';
 export function login(credential) {
     return function(dispatch) {
         dispatch({
@@ -8,7 +8,7 @@ export function login(credential) {
         });
 
         return auth.loginWithEmailAndPassword(credential)
-            .then(user => {
+        .then(user => {
             dispatch({
                 type: 'LOGIN_SUCCESS',
                 token: auth.token,

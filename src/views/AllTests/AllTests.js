@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
     Col,
     Row
@@ -6,15 +6,20 @@ import {
 
 import Suite from './_Suite';
 
-// for dev purposes
-import fakeSuites from '../../seeds/suites';
-
-class AllTests extends Component {
+class AllTests extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            suites: this.props.tests || fakeSuites
+            suites: this.props.suites || []
         };   
+    }
+
+    componentWillMount() {
+        this.props.getAllSuites();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState(prevState => Object.assign({}, prevState, { suites: nextProps.suites }))
     }
 
     deleteSuite(suite) {
@@ -27,7 +32,6 @@ class AllTests extends Component {
 
     render() {
         const suites = this.state.suites;
-
         return (
             <div className="animated fadeIn">
                 
