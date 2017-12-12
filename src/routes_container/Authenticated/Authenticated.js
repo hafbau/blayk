@@ -30,6 +30,7 @@ function AuthenticatedRoutes(props) {
                 <Route path="/new" name="Create Test" render={() => <CreateTest {...props} />} /> 
                 <Route name="All Tests" exact path="/tests" render={() => <AllTests {...props} />} />
                 <Route name="View Suite" exact path="/tests/:id" render={() => <SingleSuite {...props} />} />
+
                 <Route name="View Test Case" exact path="/tests/:suiteId/cases/:id" render={() => <SingleCase {...props} />} />
                 <Route name="Run Test Case" exact path="/tests/:suiteId/cases/:id/run" render={() => <RunTest {...props} />} />
                 

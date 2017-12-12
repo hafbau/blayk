@@ -8,7 +8,6 @@ export function createSuite(body, token) {
 
         return testApi.createSuite(body, token)
             .then(({ body: { suite } }) => {
-            console.log("suite created", suite)
             dispatch({
                 type: 'CREATE_SUITE_SUCCESS',
                 suite
@@ -32,7 +31,6 @@ export function getAllSuites() {
 
         return testApi.getAllSuites(getState().token)
         .then(({ body: { suites } }) => {
-            console.log("all suites gotten", suites)
             dispatch({
                 type: 'GET_ALL_SUITES_SUCCESS',
                 suites
@@ -56,7 +54,6 @@ export function getSuite(_id, token) {
 
         return testApi.getSuite(_id, getState().token)
         .then(({ body: { suite } }) => {
-            console.log("got a suite", suite)
             dispatch({
                 type: 'GET_SUITE_SUCCESS',
                 suite
@@ -80,7 +77,6 @@ export function runCase(suiteId, order) {
 
         return testApi.runCase(suiteId, order, getState().token)
         .then(({ body }) => {
-            console.log("run a case sucess", body)
             dispatch({
                 type: 'RUN_CASE_SUCCESS',
                 testCase: body.testCase
@@ -104,7 +100,6 @@ export function updateSuite(body) {
 
         return testApi.updateSuite(body, getState().token)
         .then(({ body: { suite } }) => {
-            console.log("suite updated", suite)
             dispatch({
                 type: 'UPDATE_SUITE_SUCCESS',
                 suite
@@ -129,7 +124,6 @@ export function saveAndRun(body, token) {
 
         return testApi.saveAndRun(body, token)
         .then(({ body }) => {
-            console.log("body octeted", body)
             dispatch({
                 type: 'SAVE_AND_RUN_SUCCESS',
                 results: body
@@ -153,7 +147,6 @@ export function updateCase(body) {
 
         return testApi.updateCase(body, getState().token)
         .then(({ body }) => {
-            console.log("body updated", body)
             dispatch({
                 type: 'UPDATE_CASE_SUCCESS',
                 testCase: body

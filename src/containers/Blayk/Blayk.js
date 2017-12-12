@@ -20,14 +20,16 @@ import Unauthenticated from '../../routes_container/Unauthenticated/';
 class App extends Component {
 
   componentDidMount() {
-    if (this.props.token) this.props.createListener(String(this.props.user.id), this.props.socket);
+    if (this.props.token && this.props.socket) this.props.createListener(String(this.props.user.id), this.props.socket);
   }
   
   render() {
-    console.log("in login render", this.props)
-    // console.log("props in blayk", this.props)
-    if (!this.props.token) return <Unauthenticated />
-    return <Authenticated {...this.props} />
+    console.log("props in blayk", this.props)
+    if (this.props.token) {
+      if (['/login', '/register'].includes(this.props.location.pathname)) this.props.history.replace("/tests")
+      return <Authenticated {...this.props} />
+    }
+    return <Unauthenticated />
   }
 };
 

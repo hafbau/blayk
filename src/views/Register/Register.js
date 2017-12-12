@@ -40,6 +40,21 @@ class Register extends Component {
           <Row className="justify-content-center">
             <Col md="8">
               <CardGroup className="mb-0">
+                <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
+                  <CardBlock className="card-body text-center">
+                    <div>
+                      <h2>Log In</h2>
+                      <p>Already has an account here?</p>
+                      <Button
+                        active
+                        className="mt-3"
+                        color="primary"
+                        tag={Link}
+                        to="/login"
+                      >Login</Button>
+                    </div>
+                  </CardBlock>
+                </Card>
                 <Card className="p-4">
                   <CardBlock className="card-body">
                     <h1>Register</h1>
@@ -71,21 +86,6 @@ class Register extends Component {
                     </Row>
                   </CardBlock>
                   
-                </Card>
-                <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
-                  <CardBlock className="card-body text-center">
-                    <div>
-                      <h2>Log In</h2>
-                      <p>Already has an account here?</p>
-                      <Button
-                        active
-                        className="mt-3"
-                        color="primary"
-                        tag={Link}
-                        to="/login"
-                      >Login</Button>
-                    </div>
-                  </CardBlock>
                 </Card>
               </CardGroup>
             </Col>
