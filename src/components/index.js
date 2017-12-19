@@ -4,21 +4,22 @@
  */
 
  
-// import BreadCrumb from './BreadCrumb/';
 import Footer from './Footer/';
 import Header from './Header/';
 import MediaPanel from './MediaPanel/';
+import ProfileHero from './ProfileHero/';
+import ProfileTabs from './ProfileTabs/';
 import ProgressBar from './ProgressBar/';
 import Result from './Result/';
 import RunState from './RunState/';
-// import SideBar from './SideBar/';
 import Spinner from './Spinner/';
 
 export {
-    // BreadCrumb,
     Footer,
     Header,
     MediaPanel,
+    ProfileHero,
+    ProfileTabs,
     ProgressBar,
     Result,
     RunState,

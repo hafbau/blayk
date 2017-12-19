@@ -1,9 +1,5 @@
 /**
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.6
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
+ * Blayk UI
  */
 // Override Boostrap variables
 @import "bootstrap-variables";
@@ -28,6 +24,9 @@
 
 // Import core styles
 @import "core/core";
+
+// Import user avatar
+@import "user-avatar";
 
 // Import stepzilla
 @import "step-zilla";

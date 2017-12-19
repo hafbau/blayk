@@ -1,0 +1,43 @@
+.avatar-wrapper {
+    padding: $spacer;
+    position: relative;
+    border: 2px dashed transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.avatar-wrapper:hover, .drag-enter {
+    border: 2px dashed $blue;
+    // z-index: -1;
+}
+
+.avatar-wrapper p {
+    font-size: 1rem;
+    text-align: center;
+    visibility: hidden
+}
+
+.avatar-wrapper:hover p {
+    visibility: visible;
+}
+// User avatar
+.UserAvatar {
+    display: inline-block;
+    color: white;
+}
+
+.UserAvatar--inner {
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.UserAvatar--light {
+    color: gray;
+}
+
+.UserAvatar--light .UserAvatar--inner {
+    border: 1px solid lightgray;
+}

@@ -74,7 +74,7 @@ class Header extends Component {
               <DropdownMenu right className={this.state.dropdownOpen ? 'show' : ''}>
                 <DropdownItem header className="text-center"><strong>Account</strong></DropdownItem>
 
-                <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
+                <DropdownItem tag="a" href='/profile'><i className="fa fa-user"></i> Profile</DropdownItem>
                 <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
                 <DropdownItem><i className="fa fa-file"></i> Test Suites<Badge color="primary">42</Badge></DropdownItem>
                 <DropdownItem divider/>

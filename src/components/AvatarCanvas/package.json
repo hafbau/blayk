@@ -1,0 +1,6 @@
+{
+  "name": "AvatarCanvas",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./AvatarCanvas.js"
+}
