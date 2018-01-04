@@ -92,6 +92,28 @@ export function runCase(suiteId, order) {
     }
 }
 
+export function scheduleRun({ body, suiteId, order }) {
+    return function(dispatch, getState) {
+        dispatch({
+            type: 'SCHEDULE_RUN_CASE_PENDING'
+        });
+
+        return testApi.scheduleRun({ body, suiteId, order }, getState().token)
+        .then(({ body }) => {
+            dispatch({
+                type: 'SCHEDULE_RUN_CASE_SUCCESS',
+            });
+
+        })
+        .catch(error => {
+            return dispatch({
+                type: 'SCHEDULE_RUN_CASE_FAILURE',
+                error
+            })
+        })
+    }
+}
+
 export function updateSuite(body) {
     return function(dispatch, getState) {
         dispatch({

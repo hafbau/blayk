@@ -83,9 +83,31 @@ export default (state = initialState, action) => {
                 error: null
             };
 
-        /**
-         * Socket setup Related
-         */
+        
+        // Update user
+        case "UPDATE_USER_FAILURE":
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            };
+        case "UPDATE_USER_PENDING":
+            return {
+                ...state,
+                loading: true,
+                error: null
+            };
+        case "UPDATE_USER_SUCCESS":
+            return {
+                ...state,
+                user: action.user,
+                loading: false,
+                error: null
+            };
+
+        
+        /** Socket setup Related
+        */
         // has_socket
         case "HAS_SOCKET":
             return {
@@ -173,7 +195,7 @@ export default (state = initialState, action) => {
                 error: null
             };
         
-        // save and run
+        // run case
         case "RUN_CASE_FAILURE":
             return {
                 ...state,
@@ -193,6 +215,26 @@ export default (state = initialState, action) => {
                 ...state,
                 testCase: action.testCase,
                 results: action.testCase.steps,
+                loading: false,
+                error: null
+            };
+        
+        // schedule run case
+        case "SCHEDULE_RUN_CASE_FAILURE":
+            return {
+                ...state,
+                loading: false,
+                error: action.error,
+            };
+        case "SCHEDULE_RUN_CASE_PENDING":
+            return {
+                ...state,
+                loading: true,
+                error: null,
+            };
+        case "SCHEDULE_RUN_CASE_SUCCESS":
+            return {
+                ...state,
                 loading: false,
                 error: null
             };

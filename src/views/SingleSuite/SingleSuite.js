@@ -9,14 +9,30 @@ import cuid from 'cuid';
 import deepClone from '../../utils/deep_clone';
 import { set } from '../../utils/resolve_object_path';
 
-class AllTests extends Component {
+class SingleSuite extends Component {
     constructor(props) {
         super(props)
+        const suite = Object.assign({},
+            this.props.location.state.suite,
+            {
+                meta: {
+                    slack: this.props.user && this.props.user.slack,
+                    jiraURL: this.props.user && this.props.user.jiraURL,
+                    jiraUsername: this.props.user && this.props.user.jiraUsername,
+                    jiraPassword: this.props.user && this.props.user.jiraPassword,
+                    pipeline: this.props.user && this.props.user.pipeline,
+                }
+            }
+        )
         this.state = {
-            suite: this.props.location.state.suite // TODO: fallback to go fetch it if not in loccation state e.g. when entered to the address bar directly
+            suite, // TODO: fallback to go fetch it (componentWillMount) if not in location state e.g. when entered to the address bar directly
+            hasIssueService: !!(suite.meta.jiraURL && suite.meta.jiraUsername && suite.meta.jiraPassword)
         };   
     }
-
+    componentWillReceiveProps(nextProps, nextState) {
+        console.log('new propss to help with update after a change', nextProps)
+        
+    }
     deleteTestCase(order) {
         const suite = deepClone(this.state.suite);
         const newTestCases = suite.cases
@@ -82,8 +98,8 @@ class AllTests extends Component {
 
 
     render() {
-        const suite = this.state.suite;
-        if (!suite) return null;
+        const { hasIssueService, suite } = this.state;
+        if (!suite) return null; // TODO: redirect & throw an error instead
 
         return (
             <div className="animated fadeIn">
@@ -103,8 +119,10 @@ class AllTests extends Component {
                                 key={cuid()}
                                 move={(order, increment) => this.move(order, increment)}
                                 runTestCase={(suiteId, order) => this.props.runCase(suiteId, order)}
+                                scheduleRun={(args) => this.props.scheduleRun(args)}
                                 suiteId={suite._id}
                                 testCase={testCase}
+                                hasIssueService={hasIssueService}
                             />)}
                         </ul>    
                     </Col>
@@ -114,4 +132,4 @@ class AllTests extends Component {
     }
 }
 
-export default AllTests;
+export default SingleSuite;

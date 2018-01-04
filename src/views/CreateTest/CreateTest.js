@@ -12,6 +12,11 @@ export default class CreateTest extends Component {
 
         this.form = {
             userId: this.props.user && this.props.user._id,
+            meta: {
+                slack: this.props.user && this.props.user.slack,
+                jira: this.props.user && this.props.user.jira,
+                pipeline: this.props.user && this.props.user.pipeline,
+            },
             title: '',
             cases: [
                 {
@@ -46,7 +51,6 @@ export default class CreateTest extends Component {
     }
 
     render() {
-        console.log('thisForm render', this.form)
         const steps =
             [
                 { name: 'New Suite', component: <Step1 getForm={() => (this.getForm())} updateForm={(u) => this.updateForm(u) } /> },

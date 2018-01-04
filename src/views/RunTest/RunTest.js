@@ -10,13 +10,15 @@ import {
     Row
 } from "reactstrap";
 
+import IssueModal from './IssueModal';
 import { MediaPanel, RunState } from '../../components';
 
 class RunTest extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            case: this.props.location.state ? this.props.location.state.testCase : null,// || fakeCase, // fakeCase to be removed post dev test
+            caseToRun: this.props.location.state ? this.props.location.state.testCase : null,
+            hasIssueService: this.props.location.state ? this.props.location.state.hasIssueService : null,
             results: []
         };
 
@@ -24,8 +26,8 @@ class RunTest extends Component {
     }
 
     componentDidMount() {
-        if (this.state.case && !this.props.loading) {
-            const { order, suite: { id } } = this.state.case;
+        if (this.state.caseToRun && !this.props.loading) {
+            const { order, suite: { id } } = this.state.caseToRun;
             if (order && id) this.props.runCase(id, order);
         }
     }
@@ -43,12 +45,10 @@ class RunTest extends Component {
         )
     }
 
-    createIssue() {
-        console.log("Im creating an issue")
-    }
-
-    updateIssue() {
-        console.log("Im updating an issue")
+    toggleIssueModal() {
+        this.setState({
+            issueModal: !this.state.issueModal
+        });
     }
 
     handleResult(result, status) {
@@ -71,11 +71,16 @@ class RunTest extends Component {
     }
 
     render() {
-        const caseToRun = this.state.case;
-        const { result, results, status } = this.state;
-        const isRunning = this.props.loading// || (status !== "done" && status !== "failed");
-        console.log("props in runTest", this.props);
-        console.log("state in runTest", this.state);
+        const {
+            caseToRun,
+            hasIssueService,
+            issueModal,
+            result,
+            results,
+            status
+        } = this.state;
+        const issue = caseToRun && caseToRun.meta && caseToRun.meta.issue;
+        const isRunning = this.props.loading;
 
         return (
             <div className="animated fadeIn">
@@ -97,21 +102,13 @@ class RunTest extends Component {
                             </CardBlock>
 
                             <CardFooter>
-                                {result && !result.pass && caseToRun && !caseToRun.hasIssue && <Button
+                                {results.length && hasIssueService && <Button
                                     color="secondary"
                                     disabled={isRunning}
-                                    onClick={() => this.createIssue()}
+                                    onClick={() => this.toggleIssueModal()}
                                     size="md"
                                     type="submit"
-                                >Create Issue</Button>}
-
-                                {result && result.pass && caseToRun && caseToRun.hasIssue && <Button
-                                    color="secondary"
-                                    disabled={isRunning}
-                                    onClick={() => this.updateIssue()}
-                                    size="md"
-                                    type="submit"
-                                >Update Issue</Button>}
+                                >{issue ? 'Update Issue' : 'Create Issue'}</Button>}
 
                                 <Button
                                     className="float-right"
@@ -137,6 +134,13 @@ class RunTest extends Component {
                             image={result && result.image}
                             images={results && results.map(result => result.meta.imageDataUrl)}/>
                     </Col>
+
+                    <IssueModal
+                        isOpen={issueModal}
+                        testCase={caseToRun}
+                        issue={issue}
+                        toggle={(e) => this.toggleIssueModal(e)}
+                    />
                 </Row>}
             </div>
         )

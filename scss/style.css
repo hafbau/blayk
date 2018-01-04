@@ -8731,6 +8731,15 @@ hr.transparent {
   *[dir="rtl"].callout-dark {
     border-right-color: #29363d; }
 
+.Profile-Panel-Tab-Pane .card-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+
+.Profile-Panel-Tab-Pane .form-group {
+  width: 80%;
+  min-width: 300px; }
+
 .avatar-wrapper {
   padding: 1rem;
   position: relative;

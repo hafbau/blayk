@@ -2,7 +2,7 @@ import React from 'react';
 import UserAvatar from 'react-user-avatar';
 
 function Avatar(props) {
-  const { src, name = 'H S', size = 200 } = props;
+    const { src, name, size = 200 } = props;
     return (
         <UserAvatar
             size={size}

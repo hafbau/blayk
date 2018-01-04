@@ -1,0 +1,10 @@
+// Profile Tabs
+.Profile-Panel-Tab-Pane .card-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.Profile-Panel-Tab-Pane .form-group {
+    width: 80%;
+    min-width: 300px;
+}

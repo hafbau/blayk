@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import {
     Button,
     Card,
@@ -43,10 +43,19 @@ export default class Case extends React.Component {
         return false;
     }
 
+    runCase() {
+        this.setState({
+            redirectToRun: true
+        });
+    }
+
     schedule(e) {
-        console.log(
-            'Im scheduling stuff', this.state.form
-        )
+        this.props.scheduleRun({
+            body: this.state.form,
+            suiteId: this.props.suiteId,
+            order: this.props.testCase.order
+        })
+        .then(_ => this.toggle());
     }
 
     toggle() {
@@ -57,7 +66,13 @@ export default class Case extends React.Component {
 
     render() {
         const props = this.props;
-        const { job, suiteId, testCase } = props;
+        const { suiteId, testCase = {}, hasIssueService } = props;
+        const job = testCase.job;
+
+        if (this.state.redirectToRun) return <Redirect to={{
+            pathname: `/tests/${suiteId}/cases/${testCase._id}/run`,
+            state: { testCase, hasIssueService }
+        }} />
 
         return <li className="test">
             <Card>
@@ -70,13 +85,11 @@ export default class Case extends React.Component {
                         <span className="test-name">{testCase.title}</span>
                     </Link>
                     <div className='right'>
-                        <Link to={{
-                            pathname: `/tests/${suiteId}/cases/${testCase._id}/run`,
-                            state: { testCase }
-                        }}>
-                            <i className="fa fa-play" aria-hidden="true"></i>
-                        </Link>
-                        <Button onClick={this.toggle}>L</Button>
+                        
+                        <i className="fa fa-play" aria-hidden="true" onClick={() => this.runCase()}></i>
+
+                        <i className="fa fa-clock-o" aria-hidden="true" onClick={() => this.toggle()}></i>
+
                         <i className="fa fa-clone" aria-hidden="true" onClick={() => props.duplicateTestCase(testCase)}></i>
                         <i className="fa fa-arrow-up" aria-hidden="true" onClick={() => props.move(testCase.order, -1)}></i>
                         <i className="fa fa-arrow-down" aria-hidden="true" onClick={() => props.move(testCase.order, 1)}></i>
@@ -86,40 +99,59 @@ export default class Case extends React.Component {
                         <ModalHeader toggle={this.toggle}>Schedule Run</ModalHeader>
                         <ModalBody>
                             <div>
-                                {job && <p>Active Schedule is to run every {job.mins} minutes</p>}
+                                {job && <p>Active Schedule is to run every
+                                    {!!Number(job.schDays) && <b> {job.schDays} days</b>}
+                                    {!!Number(job.schHrs) && <b> {job.schHrs} hours</b>}
+                                    {!!Number(job.schMins) && <b> {job.schMins} minutes</b>}
+                                </p>}
                                 {!job && <p>No active schedule in place</p>}
                             </div>
                             <hr />
                             <div>
+                                <p>Every...</p>
                                 <Row>
                                     <Col xs="4">
                                         <FormGroup>
-                                            <Label htmlFor="sch-mins">Minutes</Label>
-                                            <Input onChange={(e) => this.handleChange(e)} type="select" name="schMins" id="sch-mins">
-                                                {times(60, n => <option key={n} value={`${n}`}>{n}</option>)}
+                                            <Label htmlFor="sch-days">Days</Label>
+                                            <Input
+                                                onChange={(e) => this.handleChange(e)}
+                                                defaultValue={job && job.schDays}
+                                                type="select"
+                                                id="sch-days"
+                                                name="schDays">
+                                                {times(31, n => <option key={n} value={`${n}`}>{n}</option>)}
                                             </Input>
                                         </FormGroup>
                                     </Col>
                                     <Col xs="4">
                                         <FormGroup>
                                             <Label htmlFor="sch-hrs">Hours</Label>
-                                            <Input onChange={(e) => this.handleChange(e)} type="select" name="schHrs" id="sch-hrs">
+                                            <Input
+                                                onChange={(e) => this.handleChange(e)}
+                                                defaultValue={job && job.schHrs}
+                                                type="select"
+                                                name="schHrs"
+                                                id="sch-hrs">
                                                 {times(24, n => <option key={n} value={`${n}`}>{n}</option>)}
                                             </Input>
                                         </FormGroup>
                                     </Col>
                                     <Col xs="4">
                                         <FormGroup>
-                                            <Label htmlFor="sch-days">Days</Label>
-                                            <Input onChange={(e) => this.handleChange(e)} type="select" id="sch-days" name="schDays" placeholder="123" required >
-                                                {times(31, n => <option key={n} value={`${n}`}>{n}</option>)}
+                                            <Label htmlFor="sch-mins">Minutes</Label>
+                                            <Input
+                                                onChange={(e) => this.handleChange(e)}
+                                                defaultValue={job && job.schMins}
+                                                type="select" name="schMins"
+                                                id="sch-mins">
+                                                {times(60, n => (n % 5 === 0) && <option key={n} value={`${n}`}>{n}</option>)}
                                             </Input>
                                         </FormGroup>
                                     </Col>
                                 </Row>
                             </div>
 
-                    </ModalBody>
+                        </ModalBody>
                         <ModalFooter>
                             <Button color="primary" onClick={(e) => this.schedule(e)}>Schedule</Button>{' '}
                             <Button color="secondary" onClick={this.toggle}>Cancel</Button>

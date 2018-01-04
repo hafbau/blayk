@@ -1,6 +1,27 @@
 import auth from "auth";
+import media from "media";
+import config from "../config";
 
-auth.apiUrl = 'http://localhost:4001'//'http://hafiz-sandbox.tillerdigital.ca/auth/v1';
+auth.apiUrl = config.auth;
+media.apiUrl = config.media;
+
+function avatarToUrl({ avatar }) {
+    // TODO: check avatar length is a valid _id
+    if (typeof avatar === 'string' && avatar.length) {
+        return `${config.media}/files/${avatar}`
+    }
+}
+
+function getName({ firstName, lastName }) {
+    return `${firstName} ${lastName}`
+}
+
+function prepareUser(user) {
+    user.avatar = avatarToUrl(user);
+    user.name = getName(user);
+    return user;
+}
+
 export function login(credential) {
     return function(dispatch) {
         dispatch({
@@ -9,6 +30,7 @@ export function login(credential) {
 
         return auth.loginWithEmailAndPassword(credential)
         .then(user => {
+            user = prepareUser(user);
             dispatch({
                 type: 'LOGIN_SUCCESS',
                 token: auth.token,
@@ -57,6 +79,7 @@ export function register(body) {
 
         return auth.registerWithEmailAndPassword(body)
         .then(user => {
+            user = prepareUser(user);
             dispatch({
                 type: 'REGISTER_SUCCESS',
                 token: auth.token,
@@ -67,6 +90,34 @@ export function register(body) {
         .catch(error => {
             return dispatch({
                 type: 'REGISTER_FAILURE',
+                error
+            })
+        })
+    }
+}
+
+export function updateUser(body, avatarHasChanged) {
+    return function(dispatch, getState) {
+        dispatch({
+            type: 'UPDATE_USER_PENDING',
+        });
+
+        return Promise.resolve(avatarHasChanged ? media.upload(body.avatar) : null)
+        .then(avatar => {
+            if (avatar) body.avatar = avatar;
+            return auth.update(body, getState().token)
+        })
+        .then(user => {
+            user = prepareUser(user);
+            dispatch({
+                type: 'UPDATE_USER_SUCCESS',
+                user
+            });
+
+        })    
+        .catch(error => {
+            return dispatch({
+                type: 'UPDATE_USER_FAILURE',
                 error
             })
         })

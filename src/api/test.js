@@ -28,6 +28,13 @@ export default {
             .set('x-access-token', token)
             .set('Content-Type', 'application/json');
     },
+    scheduleRun({ body, suiteId, order }, token) {
+        return fetch.post(`${config.API_PATH}/scheduleTest/${suiteId}/cases/${order}`)
+            .send(body)    
+            .type('json')
+            .set('x-access-token', token)
+            .set('Content-Type', 'application/json');
+    },
     saveAndRun(body, token) {
         return fetch.post(`${config.API_PATH}/tests/saveAndRun`)
             .send(body)

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 
-import { logout } from '../../action_creators/auth';
+import { logout, updateUser } from '../../action_creators/auth';
 import {
   createSuite,
   getAllSuites,
   getSuite,
   runCase,
+  scheduleRun,
   saveAndRun,
   updateSuite
 } from '../../action_creators/test';
@@ -45,8 +46,10 @@ function mapDispatchToProps(dispatch) {
     getSuite: bindActionCreators(getSuite, dispatch),
     logout: bindActionCreators(logout, dispatch),
     runCase: bindActionCreators(runCase, dispatch),
+    scheduleRun: bindActionCreators(scheduleRun, dispatch),
     saveAndRun: bindActionCreators(saveAndRun, dispatch),
     updateSuite: bindActionCreators(updateSuite, dispatch),
+    updateUser: bindActionCreators(updateUser, dispatch),
   };
 }
 

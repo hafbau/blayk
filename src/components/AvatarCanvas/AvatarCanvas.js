@@ -1,10 +1,10 @@
 import React from 'react';
-import AvatarEditor from 'react-avatar-editor';
 import { Input } from 'reactstrap';
 import Avatar from '../Avatar';
 
 function AvatarCanvas(props) {
-  const { editMode, handleFileInput, avatarSrc: src, name = 'H S', size = 200 } = props;
+    const { onChange, avatar, name = 'B L', size = 200 } = props;
+    
     return (
         <div className="avatar-wrapper"
             style={{
@@ -19,26 +19,14 @@ function AvatarCanvas(props) {
                 return false;
             }}
         >
-        {editMode && <AvatarEditor
-            image={src}
-            width={size}
-            height={size}
-            border={0}
-            borderRadius={size / 2}
-            scale={1.2}
-            rotate={0}
-        />}
-        {!editMode && <Avatar
+        <Avatar
             size={size}
-            src={src}
+            src={avatar}
             name={name}
-            style={{
-                fontSize: `${size * 0.42}`,
-            }}
-            />}
+        />
         <Input
             type="file"
-            onChange={handleFileInput}
+            onChange={onChange}
             accept="image/*"
             style={{
                 width: '100%',
@@ -50,7 +38,7 @@ function AvatarCanvas(props) {
                 cursor: 'pointer',
             }}
         />
-        <p style={{width: '100%'}}>Drag and drop image or click to upload image</p>
+        <p className="lead" style={{width: '100%'}}>Drag and drop image or click to upload image</p>
     </div>)
 }
 
