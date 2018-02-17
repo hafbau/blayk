@@ -1,22 +1,22 @@
 import testApi from "../api/test";
+import { resolved, prepareUser, pending, failure } from "./helpers";
 
 export function createSuite(body, token) {
     return function(dispatch) {
-        dispatch({
-            type: 'CREATE_SUITE_PENDING',
-        });
+        dispatch(pending);
 
         return testApi.createSuite(body, token)
             .then(({ body: { suite } }) => {
             dispatch({
-                type: 'CREATE_SUITE_SUCCESS',
-                suite
+                ...resolved,
+                suite,
+                success: { message: "Test suite created successfully."}
             });
 
         })
         .catch(error => {
             return dispatch({
-                type: 'CREATE_SUITE_FAILURE',
+                ...failure,
                 error
             })
         })
@@ -25,21 +25,19 @@ export function createSuite(body, token) {
 
 export function getAllSuites() {
     return function(dispatch, getState) {
-        dispatch({
-            type: 'GET_ALL_SUITES_PENDING'
-        });
+        dispatch(pending);
 
         return testApi.getAllSuites(getState().token)
         .then(({ body: { suites } }) => {
             dispatch({
-                type: 'GET_ALL_SUITES_SUCCESS',
+                ...resolved,
                 suites
             });
 
         })
         .catch(error => {
             return dispatch({
-                type: 'GET_ALL_SUITES_FAILURE',
+                ...failure,
                 error
             })
         })
@@ -48,21 +46,19 @@ export function getAllSuites() {
 
 export function getSuite(_id, token) {
     return function(dispatch, getState) {
-        dispatch({
-            type: 'GET_SUITE_PENDING',
-        });
+        dispatch(pending);
 
         return testApi.getSuite(_id, getState().token)
         .then(({ body: { suite } }) => {
             dispatch({
-                type: 'GET_SUITE_SUCCESS',
+                ...resolved,
                 suite
             });
 
         })
         .catch(error => {
             return dispatch({
-                type: 'GET_SUITE_FAILURE',
+                ...failure,
                 error
             })
         })
@@ -72,20 +68,26 @@ export function getSuite(_id, token) {
 export function runCase(suiteId, order) {
     return function(dispatch, getState) {
         dispatch({
-            type: 'RUN_CASE_PENDING'
+            ...pending,
+            results: [],
+            running: true
         });
 
         return testApi.runCase(suiteId, order, getState().token)
         .then(({ body }) => {
             dispatch({
-                type: 'RUN_CASE_SUCCESS',
-                testCase: body.testCase
+                ...resolved,
+                running: false,
+                testCase: body.testCase,
+                results: body.testCase.steps
             });
 
         })
         .catch(error => {
-            return dispatch({
-                type: 'RUN_CASE_FAILURE',
+            dispatch({
+                failure,
+                results: [],
+                running: false,
                 error
             })
         })
@@ -94,20 +96,19 @@ export function runCase(suiteId, order) {
 
 export function scheduleRun({ body, suiteId, order }) {
     return function(dispatch, getState) {
-        dispatch({
-            type: 'SCHEDULE_RUN_CASE_PENDING'
-        });
+        dispatch(pending);
 
         return testApi.scheduleRun({ body, suiteId, order }, getState().token)
         .then(({ body }) => {
             dispatch({
-                type: 'SCHEDULE_RUN_CASE_SUCCESS',
+                ...resolved,
+                success: { message: "Test case run successfully scheduled" }
             });
 
         })
         .catch(error => {
-            return dispatch({
-                type: 'SCHEDULE_RUN_CASE_FAILURE',
+            dispatch({
+                ...failure,
                 error
             })
         })
@@ -116,21 +117,20 @@ export function scheduleRun({ body, suiteId, order }) {
 
 export function updateSuite(body) {
     return function(dispatch, getState) {
-        dispatch({
-            type: 'UPDATE_SUITE_PENDING'
-        });
+        dispatch(pending);
 
         return testApi.updateSuite(body, getState().token)
         .then(({ body: { suite } }) => {
             dispatch({
-                type: 'UPDATE_SUITE_SUCCESS',
+                ...resolved,
+                success: { message: "Test suite successfully updated." },
                 suite
             });
 
         })
         .catch(error => {
-            return dispatch({
-                type: 'UPDATE_SUITE_FAILURE',
+            dispatch({
+                ...failure,
                 error
             })
         })
@@ -140,22 +140,22 @@ export function updateSuite(body) {
 export function saveAndRun(body, token) {
     return function(dispatch) {
         dispatch({
-            type: 'SAVE_AND_RUN_PENDING',
+            ...pending,
             runningCase: body
         });
 
         return testApi.saveAndRun(body, token)
         .then(({ body }) => {
             dispatch({
-                type: 'SAVE_AND_RUN_SUCCESS',
+                ...resolved,
                 results: body,
-                successMessage: "Successful test run."
+                success: { message: "Test case successfully saved and ran." }
             });
 
         })
         .catch(error => {
-            return dispatch({
-                type: 'SAVE_AND_RUN_FAILURE',
+            dispatch({
+                ...failure,
                 error
             })
         })
@@ -164,21 +164,20 @@ export function saveAndRun(body, token) {
 
 export function updateCase(body) {
     return function(dispatch, getState) {
-        dispatch({
-            type: 'UPDATE_CASE_PENDING'
-        });
+        dispatch(pending);
 
         return testApi.updateCase(body, getState().token)
         .then(({ body }) => {
             dispatch({
-                type: 'UPDATE_CASE_SUCCESS',
+                ...resolved,
+                success: { message: "Test case updated successfully." },
                 testCase: body
             });
 
         })
         .catch(error => {
-            return dispatch({
-                type: 'UPDATE_CASE_FAILURE',
+            dispatch({
+                ...failure,
                 error
             })
         })
