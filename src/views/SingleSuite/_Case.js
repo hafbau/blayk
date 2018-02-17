@@ -1,22 +1,12 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import {
-    Button,
     Card,
     CardBlock,
-    Col,
-    FormGroup,
-    Input,
-    Label,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Row
 } from "reactstrap";
 
+import ScheduleModal from './_ScheduleModal';
 import deepClone from '../../utils/deep_clone';
-import { times } from '../../utils/array_helpers';
 
 export default class Case extends React.Component {
 
@@ -35,6 +25,7 @@ export default class Case extends React.Component {
     }
 
     handleChange({ target: { name, value } }) {
+        console.log('name', name, 'value', value)
         const form = deepClone(this.state.form);
         form[name] = value;
 
@@ -50,6 +41,7 @@ export default class Case extends React.Component {
     }
 
     schedule(e) {
+        console.log('in schedule', this.state)
         this.props.scheduleRun({
             body: this.state.form,
             suiteId: this.props.suiteId,
@@ -67,7 +59,6 @@ export default class Case extends React.Component {
     render() {
         const props = this.props;
         const { suiteId, testCase = {}, hasIssueService } = props;
-        const job = testCase.job;
 
         if (this.state.redirectToRun) return <Redirect to={{
             pathname: `/tests/${suiteId}/cases/${testCase._id}/run`,
@@ -95,68 +86,14 @@ export default class Case extends React.Component {
                         <i className="fa fa-arrow-down" aria-hidden="true" onClick={() => props.move(testCase.order, 1)}></i>
                         <i className="fa fa-trash" aria-hidden="true" onClick={() => props.deleteTestCase(testCase.order)}></i>
                     </div>
-                    <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                        <ModalHeader toggle={this.toggle}>Schedule Run</ModalHeader>
-                        <ModalBody>
-                            <div>
-                                {job && <p>Active Schedule is to run every
-                                    {!!Number(job.schDays) && <b> {job.schDays} days</b>}
-                                    {!!Number(job.schHrs) && <b> {job.schHrs} hours</b>}
-                                    {!!Number(job.schMins) && <b> {job.schMins} minutes</b>}
-                                </p>}
-                                {!job && <p>No active schedule in place</p>}
-                            </div>
-                            <hr />
-                            <div>
-                                <p>Every...</p>
-                                <Row>
-                                    <Col xs="4">
-                                        <FormGroup>
-                                            <Label htmlFor="sch-days">Days</Label>
-                                            <Input
-                                                onChange={(e) => this.handleChange(e)}
-                                                defaultValue={job && job.schDays}
-                                                type="select"
-                                                id="sch-days"
-                                                name="schDays">
-                                                {times(31, n => <option key={n} value={`${n}`}>{n}</option>)}
-                                            </Input>
-                                        </FormGroup>
-                                    </Col>
-                                    <Col xs="4">
-                                        <FormGroup>
-                                            <Label htmlFor="sch-hrs">Hours</Label>
-                                            <Input
-                                                onChange={(e) => this.handleChange(e)}
-                                                defaultValue={job && job.schHrs}
-                                                type="select"
-                                                name="schHrs"
-                                                id="sch-hrs">
-                                                {times(24, n => <option key={n} value={`${n}`}>{n}</option>)}
-                                            </Input>
-                                        </FormGroup>
-                                    </Col>
-                                    <Col xs="4">
-                                        <FormGroup>
-                                            <Label htmlFor="sch-mins">Minutes</Label>
-                                            <Input
-                                                onChange={(e) => this.handleChange(e)}
-                                                defaultValue={job && job.schMins}
-                                                type="select" name="schMins"
-                                                id="sch-mins">
-                                                {times(60, n => (n % 5 === 0) && <option key={n} value={`${n}`}>{n}</option>)}
-                                            </Input>
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
-                            </div>
-
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="primary" onClick={(e) => this.schedule(e)}>Schedule</Button>{' '}
-                            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                        </ModalFooter>
-                    </Modal>
+                    <ScheduleModal
+                        isOpen={this.state.modal}
+                        toggle={e => this.toggle(e)}
+                        className={this.props.className}
+                        job={testCase.job}
+                        schedule={e => this.schedule(e)}
+                        handleChange={e => this.handleChange(e)}
+                    />
                 </CardBlock>
             </Card>
         </li>

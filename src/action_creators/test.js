@@ -148,7 +148,8 @@ export function saveAndRun(body, token) {
         .then(({ body }) => {
             dispatch({
                 type: 'SAVE_AND_RUN_SUCCESS',
-                results: body
+                results: body,
+                successMessage: "Successful test run."
             });
 
         })

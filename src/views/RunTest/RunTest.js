@@ -46,11 +46,14 @@ class RunTest extends Component {
     }
 
     toggleIssueModal() {
-        this.setState({
-            issueModal: !this.state.issueModal
-        });
+        if (this.state.issueModal) return this.setState({ issueModal: false })
+        this.props.fetchProjects(this.props.user)
+        this.setState({ issueModal: true });
     }
 
+    handleChange({ target: { name, value } }) {
+        this.setState({ [name]: value })
+    }
     handleResult(result, status) {
         this.setState((prevState, props) => {
             const results = prevState.results;
@@ -70,6 +73,28 @@ class RunTest extends Component {
         this.componentDidMount();
     }
 
+    saveIssue() {
+        const fields = {};
+        const {
+            caseToRun,
+            description,
+            issueType,
+            project,
+            summary,
+
+        } = this.state;
+        // const issue = (caseToRun && caseToRun.meta && caseToRun.meta.issue) || {};
+
+        fields["issuetype"] = { "id": issueType };
+        fields["project"] = { "id": project };
+        fields["summary"] = summary;
+        fields["description"] = description;
+
+        this.props.saveIssue(this.props.user, { "fields": fields })
+        this.toggleIssueModal()
+
+    }
+
     render() {
         const {
             caseToRun,
@@ -80,7 +105,7 @@ class RunTest extends Component {
             status
         } = this.state;
         const issue = caseToRun && caseToRun.meta && caseToRun.meta.issue;
-        const isRunning = this.props.loading;
+        const isRunning = this.props.running;
 
         return (
             <div className="animated fadeIn">
@@ -102,13 +127,13 @@ class RunTest extends Component {
                             </CardBlock>
 
                             <CardFooter>
-                                {results.length && hasIssueService && <Button
+                                {!!results.length && hasIssueService && <Button
                                     color="secondary"
                                     disabled={isRunning}
                                     onClick={() => this.toggleIssueModal()}
                                     size="md"
                                     type="submit"
-                                >{issue ? 'Update Issue' : 'Create Issue'}</Button>}
+                                >{!!issue ? 'Update Issue' : 'Create Issue'}</Button>}
 
                                 <Button
                                     className="float-right"
@@ -136,9 +161,13 @@ class RunTest extends Component {
                     </Col>
 
                     <IssueModal
+                        handleChange={(e) => this.handleChange(e)}    
                         isOpen={issueModal}
-                        testCase={caseToRun}
                         issue={issue}
+                        projects={this.props.jiraProjects}
+                        saveIssue={() => this.saveIssue()}
+                        selectedIssueProjectId={this.state.project}
+                        testCase={caseToRun}
                         toggle={(e) => this.toggleIssueModal(e)}
                     />
                 </Row>}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { logout, updateUser } from '../../action_creators/auth';
 import {
@@ -10,6 +10,7 @@ import {
   saveAndRun,
   updateSuite
 } from '../../action_creators/test';
+import { fetchProjects, saveIssue } from '../../action_creators/external'
 
 import { createListener } from '../../listeners';
 import { bindActionCreators } from 'redux';
@@ -17,20 +18,53 @@ import { connect } from 'react-redux';
 
 import Authenticated from '../../routes_container/Authenticated/';
 import Unauthenticated from '../../routes_container/Unauthenticated/';
+import FlashMessage from './FlashMessage';
 
-class App extends Component {
+class App extends React.PureComponent {
 
   componentDidMount() {
-    if (this.props.token && this.props.socket) this.props.createListener(String(this.props.user.id), this.props.socket);
+    if (this.props.token && this.props.socket) this.props.createListener(
+      String(this.props.user.id),
+      this.props.socket
+    );
+  }
+
+  redirectIfLoggedInAndVisitingUnAuthenticatedRoute() {
+    if (
+      this.props.token &&
+      ['/login', '/register'].includes(this.props.location.pathname)
+    ) this.props.history.replace("/tests")
+  }
+
+  routeByToken = () => this.props.token ? <Authenticated {...this.props} /> : <Unauthenticated />
+
+  optionsByType(obj, type, defaultMessage) {
+    return obj ?
+      {
+        message: obj.message || defaultMessage,
+        type
+      }
+      : {}
+  }
+
+  flashOptions() {
+    const { error, success } = this.props;
+    return Object.assign(
+      this.optionsByType(error, "error", "Error: Something went wrong"),
+      this.optionsByType(success, "success", "Success!"),
+    )
   }
   
   render() {
     console.log("props in blayk", this.props)
-    if (this.props.token) {
-      if (['/login', '/register'].includes(this.props.location.pathname)) this.props.history.replace("/tests")
-      return <Authenticated {...this.props} />
-    }
-    return <Unauthenticated />
+    this.redirectIfLoggedInAndVisitingUnAuthenticatedRoute();
+
+    return <div>
+      {this.routeByToken()}
+      <FlashMessage
+        flashOptions={this.flashOptions()}
+      />
+    </div>
   }
 };
 
@@ -50,6 +84,8 @@ function mapDispatchToProps(dispatch) {
     saveAndRun: bindActionCreators(saveAndRun, dispatch),
     updateSuite: bindActionCreators(updateSuite, dispatch),
     updateUser: bindActionCreators(updateUser, dispatch),
+    fetchProjects: bindActionCreators(fetchProjects, dispatch),
+    saveIssue: bindActionCreators(saveIssue, dispatch),
   };
 }
 
