@@ -1,5 +1,5 @@
 import testApi from "../api/test";
-import { resolved, prepareUser, pending, failure } from "./helpers";
+import { resolved, pending, failure } from "./helpers";
 
 export function createSuite(body, token) {
     return function(dispatch) {

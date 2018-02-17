@@ -1,30 +1,20 @@
-import auth from "auth";
-import media from "media";
-import config from "../config";
-
 import external from "../api/external";
-
-auth.apiUrl = config.auth;
-media.apiUrl = config.media;
+import { resolved, prepareUser, pending, failure } from "./helpers";
 
 export function fetchProjects(credential) {
     return function(dispatch) {
-        dispatch({
-            type: 'FETCH_PROJECTS_PENDING',
-        });
+        dispatch(pending);
 
         return external.createIssueMeta(credential)
-        .then(response => response.body)
-        .then(body => {
-            console.log("body",  body)
+        .then(response => {
             dispatch({
-                type: 'FETCH_PROJECTS_SUCCESS',
-                jiraProjects: body.projects || [],
+                ...resolved,
+                jiraProjects: response.body.projects || [],
             })
         })
         .catch(error => {
-            return dispatch({
-                type: 'FETCH_PROJECTS_FAILURE',
+            dispatch({
+                ...failure,
                 error
             })
         })
@@ -33,22 +23,19 @@ export function fetchProjects(credential) {
 
 export function saveIssue(credential, issue) {
     return function(dispatch) {
-        dispatch({
-            type: 'SAVE_ISSUE_PENDING',
-        });
+        dispatch(pending);
 
         return external.saveIssue(credential, issue)
-        .then(response => response.body)
-        .then(body => {
-            console.log("saved issue",  body)
+        .then(response => {
             dispatch({
-                type: 'SAVE_ISSUE_SUCCESS',
-                jiraIssue: body,
+                ...resolved,
+                success: { message: "Issue successfully saved to Jira." },
+                jiraIssue: response.body,
             })
         })
         .catch(error => {
-            return dispatch({
-                type: 'SAVE_ISSUE_FAILURE',
+            dispatch({
+                ...failure,
                 error
             })
         })
