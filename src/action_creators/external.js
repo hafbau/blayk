@@ -1,5 +1,5 @@
 import external from "../api/external";
-import { resolved, prepareUser, pending, failure } from "./helpers";
+import { resolved, pending, failure } from "./helpers";
 
 export function fetchProjects(credential) {
     return function(dispatch) {
@@ -22,7 +22,8 @@ export function fetchProjects(credential) {
 }
 
 export function saveIssue(credential, issue) {
-    return function(dispatch) {
+    return function (dispatch) {
+        console.log('action in saveIssue', pending)
         dispatch(pending);
 
         return external.saveIssue(credential, issue)

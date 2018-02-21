@@ -46,7 +46,13 @@ class RunTest extends Component {
     }
 
     toggleIssueModal() {
-        if (this.state.issueModal) return this.setState({ issueModal: false })
+        if (this.state.issueModal) return this.setState({
+            issueModal: false,
+            description: '',
+            summary: '',
+            issueType: '',
+            project: ''
+        })
         this.props.fetchProjects(this.props.user)
         this.setState({ issueModal: true });
     }

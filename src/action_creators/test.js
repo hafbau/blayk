@@ -66,7 +66,7 @@ export function getSuite(_id, token) {
 }
 
 export function runCase(suiteId, order) {
-    return function(dispatch, getState) {
+    return function (dispatch, getState) {
         dispatch({
             ...pending,
             results: [],

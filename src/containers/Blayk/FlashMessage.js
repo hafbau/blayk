@@ -19,14 +19,14 @@ class FlashMessage extends React.PureComponent {
     }
 
     flash({ message, type = "success", flashTime = 3000 }) {
-        if (!message || message === this.state.message) return;
+        if (!message) return;
         
         const containerStyle = Object.assign({}, this.state.containerStyle, {
             top: "20px"
         });
 
         const contentStyle = Object.assign({}, this.state.contentStyle, {
-            backgroundColor: type === "success" ? "green" : "red",
+            backgroundColor: type === "success" ? "#54ca58" : "#f3483c",
         });
 
         this.setState({ contentStyle, containerStyle, message, timeout: this.close(flashTime) })
@@ -50,20 +50,21 @@ export default FlashMessage;
 
 const style = {
     container: {
-        display: "flex",
         alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
+        color: "#fefefe",
+        display: "flex",
         height: "45px",
+        justifyContent: "center",
         position: "absolute",
+        transition: "all 0.5s ease",
+        width: "100%",
         top: "-250px",
-        transition: "all 0.5s ease"
     },
     content: {
+        fontSize: "1rem",
         height: "100%",
         textAlign: "center",
         minWidth: "320px",
-        padding: "0 40px",
-        lineHeight: "1.5"
+        padding: "10px 40px"
     }
 }

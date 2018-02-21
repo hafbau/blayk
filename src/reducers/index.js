@@ -14,6 +14,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+    action = { ...action }
     delete action.type;
     const payload = action.payload;
     delete action.payload;

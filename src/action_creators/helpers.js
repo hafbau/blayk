@@ -18,12 +18,14 @@ export function prepareUser(user) {
 };
 
 export const pending = {
+    type: "PENDING",
     loading: true,
     error: null,
     success: null
 };
 
 export const resolved = {
+    type: "RESOLVED",
     loading: false,
     error: null,
     success: null
