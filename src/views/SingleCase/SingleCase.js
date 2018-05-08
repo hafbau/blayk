@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     Button,
     Col,
+    Label,
     Input,
     Row
 } from "reactstrap";
@@ -9,7 +10,7 @@ import {
 import cuid from 'cuid';
 import Step from './_Step';
 import deepClone from '../../utils/deep_clone';
-import { set } from '../../utils/resolve_object_path';
+import { set, get } from '../../utils/resolve_object_path';
 
 class SingleCase extends Component {
     constructor(props) {
@@ -53,12 +54,14 @@ class SingleCase extends Component {
     }
 
     getCase() {
-        if (this.props.isNew) return this.props.getForm().cases[0];
-
-        return this.props.location && this.props.location.state ?
+        let testCase;
+        if (this.props.isNew) testCase = this.props.getForm().cases[0];
+        else testCase = this.props.location && this.props.location.state ?
             this.props.location.state.testCase :
             this.props.testCase && this.props.testCase.steps ?
                 this.props.testCase : { steps: [] }// TODO: fallback to go fetch it if not in loccation state e.g. when entered to the address bar directly
+        
+        return testCase;
     }
     
     handleChange({ target: { name, value } }) {
@@ -93,7 +96,7 @@ class SingleCase extends Component {
             .then(_ => {
                 console.log('got suite about to update')
                 const suite = this.props.suite;
-                const caseIndex = suite.cases.findIndex(c => c.order === testCase.order)
+                const caseIndex = suite && get(suite, "cases", []).findIndex(c => c.order === testCase.order)
                 
                 suite.cases[caseIndex] = testCase;
                 this.props.updateSuite(suite);
@@ -105,6 +108,7 @@ class SingleCase extends Component {
         if (this.props.isNew) {
             const form = this.props.getForm();
             form.cases[0] = testCase;
+            form.title = get(testCase, 'suite.title') || form.title;
             this.props.updateForm(form);
         }
         return false;
@@ -112,45 +116,54 @@ class SingleCase extends Component {
 
     render() {
         const testCase = this.state.testCase;
-        console.log('testcase in singlecase', testCase)
         if (!testCase) return null;
         return (
             <div className="animated fadeIn">
                 <header>
-                    <h3 style={{ display: 'flex' }}>
-                        <div className="left">    
-                            <span>Test Steps in </span>
+                    <div className="single-case-header" style={{ display: 'flex' }}>
+                        <div>
+                            <Label className="case-name-label">Suite Title</Label>
                             <Input
                                 onChange={(e) => this.handleChange(e)}
-                                name={`title`}
+                                name="suite.title"
                                 type="text"
-                                id={`test-case-title`}
-                                placeholder="Enter test case title here"
-                                defaultValue={testCase.title}
-                                style={{
-                                    display: 'inline',
-                                    width: 'auto',
-                                    fontSize: 'inherit'
-                                }}
+                                id="test-suite-title"
+                                placeholder="Suite title here..."
+                                defaultValue={testCase.suite.title}
+                                className="editable-label"
+                                style={{ width: `150px`}}
                             />
                         </div>
-                        <div className="right">
+
+                        <div>
+                            <Label className="case-name-label">Case Name</Label>
+                            <Input
+                                onChange={(e) => this.handleChange(e)}
+                                name="title"
+                                type="text"
+                                id="test-case-title"
+                                placeholder="Case title here..."
+                                defaultValue={testCase.title}
+                                className="editable-label"
+                                style={{ width: `150px`}}
+                            />
+                        </div>
+                        <div>
                             <Button
-                                style={{ marginLeft: 'auto', flex: '0.4' }}
                                 type="submit"
                                 size="md"
                                 color="primary"
                                 onClick={() => this.add()}
-                            >Add</Button>
+                                className="btn-add-step"
+                            >Add Step</Button>
                             {!this.props.isNew && <Button
-                                style={{ marginLeft: 'auto', flex: '0.4' }}
                                 type="submit"
                                 size="md"
                                 color="primary"
                                 onClick={() => this.update()}
-                            >Update</Button>}
+                            >Update Case</Button>}
                         </div>
-                    </h3>
+                    </div>
                     <hr/>
                 </header>
                 <Row>
@@ -174,14 +187,15 @@ class SingleCase extends Component {
                     size="md"
                     color="primary"
                     onClick={() => this.add()}    
-                    >Add</Button>
+                    >Add Step</Button>
                     <Button
-                    className="float-right"
+                    className=""
                     type="submit"
                     size="md"
                     color="primary"
                     onClick={() => this.update()}
-                    >Update</Button>
+                    style={{ marginLeft: '1.5rem' }}    
+                    >Update Case</Button>
                 </footer>}
             </div>
         )

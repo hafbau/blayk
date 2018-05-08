@@ -8,7 +8,7 @@ function AvatarCanvas(props) {
     return (
         <div className="avatar-wrapper"
             style={{
-                width: `${size * 2}`,
+                width: `${size * 2}px`,
             }}
             onDragEnter={({ target }) => {
                 target.classList.toggle('drag-enter')

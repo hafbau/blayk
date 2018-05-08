@@ -22,6 +22,7 @@ export function login(credential) {
 
         })
         .catch(error => {
+            error = error.error || error;
             return dispatch({
                 ...failure,
                 error
@@ -44,6 +45,7 @@ export function logout() {
 
         })
         .catch(error => {
+            error = error.error || error;
             return dispatch({
                 ...failure,
                 error
@@ -67,6 +69,7 @@ export function register(body) {
 
         })
         .catch(error => {
+            error = error.error || error;
             return dispatch({
                 ...failure,
                 error
@@ -94,6 +97,7 @@ export function updateUser(body, avatarHasChanged) {
 
         })    
         .catch(error => {
+            error = error.error || error;
             dispatch({
                 ...failure,
                 error

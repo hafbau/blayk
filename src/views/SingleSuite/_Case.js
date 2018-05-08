@@ -25,7 +25,6 @@ export default class Case extends React.Component {
     }
 
     handleChange({ target: { name, value } }) {
-        console.log('name', name, 'value', value)
         const form = deepClone(this.state.form);
         form[name] = value;
 
@@ -41,7 +40,6 @@ export default class Case extends React.Component {
     }
 
     schedule(e) {
-        console.log('in schedule', this.state)
         this.props.scheduleRun({
             body: this.state.form,
             suiteId: this.props.suiteId,

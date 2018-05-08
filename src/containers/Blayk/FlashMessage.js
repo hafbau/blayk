@@ -19,7 +19,7 @@ class FlashMessage extends React.PureComponent {
     }
 
     flash({ message, type = "success", flashTime = 3000 }) {
-        if (!message) return;
+        if (!message || message === this.state.message) return;
         
         const containerStyle = Object.assign({}, this.state.containerStyle, {
             top: "20px"
@@ -59,6 +59,7 @@ const style = {
         transition: "all 0.5s ease",
         width: "100%",
         top: "-250px",
+        zIndex: "1000"
     },
     content: {
         fontSize: "1rem",

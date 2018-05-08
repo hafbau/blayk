@@ -119,7 +119,7 @@ export default class MultiStep extends Component {
           <Button
             style={this.state.showPreviousBtn ? {} : this.hidden}
             className="multistep__btn--prev"
-            size="lg"
+            size="md"
             color="primary"
             onClick={(e) => this.previous()}
           >Previous</Button>
@@ -127,7 +127,7 @@ export default class MultiStep extends Component {
           <Button
             style={this.state.showNextBtn ? {} : this.hidden}
             className="float-right"
-            size="lg"
+            size="md"
             color="primary"
             onClick={(e) => this.next()}
           >Next</Button>
@@ -136,7 +136,7 @@ export default class MultiStep extends Component {
             style={!this.state.showNextBtn && this.state.showLastActionBtn ? {} : this.hidden}
             className="float-right"
             type="submit"
-            size="lg"
+            size="md"
             color="primary"
             onClick={(e) => this.props.lastAction(e)}
           >{this.props.lastActionText}</Button>

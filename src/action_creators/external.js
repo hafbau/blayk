@@ -13,6 +13,7 @@ export function fetchProjects(credential) {
             })
         })
         .catch(error => {
+            error = error.error || error;
             dispatch({
                 ...failure,
                 error
@@ -35,6 +36,7 @@ export function saveIssue(credential, issue) {
             })
         })
         .catch(error => {
+            error = error.error || error;
             dispatch({
                 ...failure,
                 error

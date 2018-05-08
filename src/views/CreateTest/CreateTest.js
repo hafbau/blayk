@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-
-import StepZilla from '../../components/StepZilla'
-import Step1 from './Step1';
-import Step2 from '../SingleCase';
+import {
+    Button
+} from 'reactstrap';
+import SingleCase from '../SingleCase';
 
 export default class CreateTest extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            activeStepIndex: 0
+        };
 
         this.form = {
             userId: this.props.user && this.props.user._id,
@@ -21,25 +23,24 @@ export default class CreateTest extends Component {
             cases: [
                 {
                     title: '',
-                    steps: [],
-                    order: 1
+                    steps: [{
+                        order: 1,
+                        options: {},
+                        target: {},
+                    }],
+                    order: 1,
+                    suite: {}
                 }
             ]
         };
     }
-
-    componentDidMount() { }
-
-    componentWillUnmount() { }
 
     getForm() {
         return this.form;
     }
 
     submitForm(e) {
-        console.log('suite to be submitted', this.form, 'prps', this.props)
         this.props.createSuite(this.form, this.props.token);
-
         return <Redirect to="/tests" />
     }
 
@@ -51,21 +52,21 @@ export default class CreateTest extends Component {
     }
 
     render() {
-        const steps =
-            [
-                { name: 'New Suite', component: <Step1 getForm={() => (this.getForm())} updateForm={(u) => this.updateForm(u) } /> },
-                { name: 'New Case', component: <Step2 getForm={() => (this.getForm())} updateForm={(u) => this.updateForm(u)} isNew={true}/> }
-            ]
-
         return (
-            <div className='example'>
-                <div className='step-progress'>
-                    <StepZilla
-                        steps={steps}
-                        lastActionText="Save"
-                        lastAction={(e) => this.submitForm(e)}
-                    />
-                </div>
+            <div className='create-test'>
+                <SingleCase
+                    getForm={() => (this.getForm())}
+                    updateForm={(u) => this.updateForm(u)}
+                    isNew={true}
+                />
+
+                <Button
+                    className="float-right"
+                    type="submit"
+                    size="md"
+                    color="primary"
+                    onClick={(e) => this.submitForm(e)}
+                >Create</Button>
             </div>
         )
     }

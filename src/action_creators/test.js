@@ -15,6 +15,7 @@ export function createSuite(body, token) {
 
         })
         .catch(error => {
+            error = error.error || error;
             return dispatch({
                 ...failure,
                 error
@@ -36,6 +37,7 @@ export function getAllSuites() {
 
         })
         .catch(error => {
+            error = error.error || error;
             return dispatch({
                 ...failure,
                 error
@@ -57,6 +59,7 @@ export function getSuite(_id, token) {
 
         })
         .catch(error => {
+            error = error.error || error;
             return dispatch({
                 ...failure,
                 error
@@ -84,6 +87,7 @@ export function runCase(suiteId, order) {
 
         })
         .catch(error => {
+            error = error.error || error;
             dispatch({
                 failure,
                 results: [],
@@ -107,6 +111,7 @@ export function scheduleRun({ body, suiteId, order }) {
 
         })
         .catch(error => {
+            error = error.error || error;
             dispatch({
                 ...failure,
                 error
@@ -129,6 +134,7 @@ export function updateSuite(body) {
 
         })
         .catch(error => {
+            error = error.error || error;
             dispatch({
                 ...failure,
                 error
@@ -154,6 +160,7 @@ export function saveAndRun(body, token) {
 
         })
         .catch(error => {
+            error = error.error || error;
             dispatch({
                 ...failure,
                 error
@@ -176,6 +183,7 @@ export function updateCase(body) {
 
         })
         .catch(error => {
+            error = error.error || error;
             dispatch({
                 ...failure,
                 error

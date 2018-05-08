@@ -9,7 +9,7 @@ function Avatar(props) {
             src={src}
             name={name}
             style={{
-                fontSize: `${size * 0.42}`,
+                fontSize: `${size * 0.42}px`,
             }}
         />
     )

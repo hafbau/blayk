@@ -1,5 +1,14 @@
 // Here you can add other styles
-
+a:hover {
+    text-decoration: none;
+}
+input, select, .form-control {
+    border-radius: 5px;
+}
+.container-fluid {
+    min-width: 320px;
+    max-width: 1500px;
+}
 .Media-Panel-Tab-Pane {
     text-align: center;
 }
@@ -71,11 +80,12 @@
 .test > .card {
     margin: 0;
     border: none;
-    border-top: 0.5px solid #ddd;
+    border-top: 1px solid $gray-100;
+    min-width: 260px;
 }
 
 .test > .card:hover {
-    background-color: #efe;
+    background-color: $gray-100;
 }
 
 .test .card-body {
@@ -107,4 +117,130 @@
 
 .test-name {
     padding: 0 1.25rem;
+}
+
+.actions {
+    color: $gray-100;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: $gray-400;
+}
+
+.actions i {
+    cursor: pointer;
+    padding: 1.2rem;
+}
+
+.actionsMenuToggler {
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    cursor: pointer;
+    border-right: 1px solid $gray-100;
+    font-size: 20px;
+    color: $gray-400;
+    line-height: 6;
+}
+
+.actionsMenuToggler.inheritColor {
+    color: inherit;
+}
+
+.editable-label {
+    display: inline;
+    border: 1px solid #f4f5f7;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background: #f4f5f7;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.editable-label:hover {
+    background: $gray-100;
+}
+
+.case-name-label {
+    padding: 0.5rem 0.75rem;
+    margin: 0;background: $gray-400;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    color: $white;
+}
+
+@media (max-width: 720px) {
+    .test .row {
+        flex-direction: column
+    }
+    .test .row .col-3 {
+        width: 300px;
+        max-width: 100%;
+    }
+    .actionsMenuToggler {
+        font-size: 33px;
+        padding: 0 2.5rem
+    }
+    .actions i {
+        font-size: 33px;
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 550px) {
+    .test .row .col-3 {
+        width: 260px;
+    }
+    .actionsMenuToggler,
+    .actions i {
+        font-size: 22px;
+        padding: 1.5rem;
+    }
+    .right .btn-add-step {
+        display: none;
+    }
+}
+
+// .single-case-header .right button {
+//     margin-left: auto;
+//     flex: 0.4;
+// }
+.single-case-header {
+    display: flex;
+    justify-content: space-between;
+}
+@media (max-width: 400px) {
+    .single-case-header {
+        flex-direction: column;
+    }
+    // .single-case-header .right {
+    //     margin: 1.25rem 0 0;
+    //     max-width: 100%;
+    // }
+    // .single-case-header .right button {
+    //     margin: 0;
+    //     flex: 1;
+    //     min-width: 260px;
+    // }
+    .test .row .col-3 {
+        width: 220px;
+    }
+    .actionsMenuToggler,
+    .actions i {
+        font-size: 22px;
+        padding: 1.2rem;
+    }
+}
+
+@media (max-width: 350px) {
+    .test .row .col-3 {
+        width: 190px;
+    }
+    .actionsMenuToggler,
+    .actions i {
+        font-size: 18px;
+        padding: 1rem;
+    }
 }

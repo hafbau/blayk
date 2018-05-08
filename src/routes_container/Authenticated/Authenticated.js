@@ -22,7 +22,7 @@ function AuthenticatedRoutes(props) {
       <div className="app">
         <Header {...props}/> 
         <div className="app-body">
-            <Sidebar {...props}/>  
+            <Sidebar {...props}/>
           <main className="main">
             <Breadcrumb />
             <Container fluid>
