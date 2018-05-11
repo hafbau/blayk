@@ -20,18 +20,7 @@ export default class CreateTest extends Component {
                 pipeline: this.props.user && this.props.user.pipeline,
             },
             title: '',
-            cases: [
-                {
-                    title: '',
-                    steps: [{
-                        order: 1,
-                        options: {},
-                        target: {},
-                    }],
-                    order: 1,
-                    suite: {}
-                }
-            ]
+            cases: []
         };
     }
 

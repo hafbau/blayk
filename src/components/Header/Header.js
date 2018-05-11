@@ -7,7 +7,6 @@ import {
   DropdownItem,
   Nav,
   NavItem,
-  NavbarToggler,
   NavbarBrand,
   DropdownToggle
 } from 'reactstrap';
@@ -58,16 +57,9 @@ class Header extends Component {
   render() {
     return (
       <header className="app-header navbar">
-        <NavbarToggler className="mobile-sidebar-toggler d-lg-none" onClick={this.mobileSidebarToggle}>&#9776;</NavbarToggler>
         <NavbarBrand href="/"></NavbarBrand>
-        <Nav className="navbar-nav d-md-down-none">
-          <NavItem>
-            <NavbarToggler className="nav-link sidebar-toggler" type="button"
-            onClick={this.sidebarToggle}>&#9776;</NavbarToggler>
-          </NavItem>
-        </Nav>
 
-        <Nav className="navbar-nav ml-auto">
+        <Nav className="navbar-nav">
           <NavItem>
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle className="nav-link dropdown-toggle">
@@ -81,16 +73,13 @@ class Header extends Component {
               <DropdownMenu right className={this.state.dropdownOpen ? 'show' : ''}>
                 <DropdownItem header className="text-center"><strong>Account</strong></DropdownItem>
 
-                <DropdownItem tag="a" href='/profile'><i className="fa fa-user"></i> Profile</DropdownItem>
-                <DropdownItem tag={Link} to={{pathname: '/profile', state: { tab: '2'}}}><i className="fa fa-wrench"></i> Settings</DropdownItem>
-                <DropdownItem><i className="fa fa-file"></i> Test Suites<Badge color="primary">42</Badge></DropdownItem>
-                <DropdownItem divider/>
-                <DropdownItem onClick={(e) => this.handleLogout(e)}><i className="fa fa-lock"></i> Logout</DropdownItem>
+                <DropdownItem tag="a" href='/profile'><i className="fa fa-user"></i>Profile</DropdownItem>
+                <DropdownItem tag={Link} to={{pathname: '/profile', state: { tab: '2'}}}><i className="fa fa-wrench"></i>Settings</DropdownItem>
+                <DropdownItem><i className="fa fa-file"></i>Test Suites<Badge color="primary">42</Badge></DropdownItem>
+                <DropdownItem onClick={(e) => this.handleLogout(e)}><i className="fa fa-lock"></i>Logout</DropdownItem>
 
               </DropdownMenu>
             </Dropdown>
-          </NavItem>
-          <NavItem className="d-md-down-none">
           </NavItem>
         </Nav>
       </header>

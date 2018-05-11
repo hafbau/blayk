@@ -10,10 +10,10 @@
 
 import deepClone from './deep_clone';
 
-export function get(obj, path) {
+export function get(obj, path, defaultValue) {
     return path
         .split(".")
-        .reduce((resolved, key) => resolved[key], obj);
+        .reduce((resolved, key) => resolved[key], obj) || defaultValue;
 }
 
 export function set(obj, path, value) {

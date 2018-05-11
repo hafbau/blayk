@@ -16,11 +16,11 @@ class SingleCase extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            testCase: this.getCase()
+            testCase: this.getState()
         };
     }
     
-    add() {
+    addStep() {
         const testCase = deepClone(this.state.testCase);
         const newStep = {
             order: testCase.steps.length + 1,
@@ -30,7 +30,6 @@ class SingleCase extends Component {
         
         testCase.steps.push(newStep);
         this.setState(prevState => Object.assign({}, prevState, { testCase }));
-        return this.updateNewSuiteIfNew(testCase);
     }
     
     deleteStep(order) {
@@ -41,7 +40,6 @@ class SingleCase extends Component {
         
         testCase.steps = newSteps;
         this.setState(prevState => Object.assign({}, prevState, { testCase }));
-        return this.updateNewSuiteIfNew(testCase);
     }
     
     duplicateStep(step) {
@@ -50,25 +48,48 @@ class SingleCase extends Component {
         
         testCase.steps.push(newStep)
         this.setState(prevState => Object.assign({}, prevState, { testCase }));
-        return this.updateNewSuiteIfNew(testCase);
     }
 
-    getCase() {
-        let testCase;
-        if (this.props.isNew) testCase = this.props.getForm().cases[0];
-        else testCase = this.props.location && this.props.location.state ?
-            this.props.location.state.testCase :
-            this.props.testCase && this.props.testCase.steps ?
-                this.props.testCase : { steps: [] }// TODO: fallback to go fetch it if not in loccation state e.g. when entered to the address bar directly
+    getState() {
+        let testCase = {
+            title: '',
+            steps: [{
+                order: 1,
+                options: {},
+                target: {},
+            }],
+            order: 1,
+            suite: {}
+        };
+        const { isNew, match, suites } = this.props;
+        const { id, suiteId } = match.params;
+        let suite = suites.find(s => s._id === suiteId);
+
+        if (!isNew && id && suite) {
+            if (id === 'new' && suite) testCase = Object.assign({},
+                testCase,
+                { suite: { id: suiteId, title: suite.title } },
+                { order: suite.cases.length }
+            )
+            else testCase = suite.cases.find(c => c._id === id)
+        } else suite = {
+            userId: this.props.user && this.props.user._id,
+            meta: {
+                slack: this.props.user && this.props.user.slack,
+                jira: this.props.user && this.props.user.jira,
+                pipeline: this.props.user && this.props.user.pipeline,
+            },
+            title: '',
+            cases: []
+        };
         
-        return testCase;
+        return { suite, testCase };
     }
     
     handleChange({ target: { name, value } }) {
         const testCase = set(deepClone(this.state.testCase), name, value);
         this.setState(prevState => Object.assign({}, prevState, { testCase }));
 
-        return this.updateNewSuiteIfNew(testCase);
     }
     
     move(order, increment) {
@@ -85,37 +106,26 @@ class SingleCase extends Component {
             });
         }
         this.setState(prevState => Object.assign({}, prevState, { testCase }));
-        return this.updateNewSuiteIfNew(testCase);
     }
 
     update() {
         const testCase = this.state.testCase;
-        if (!testCase.suite && !testCase.suite.id) return
+        const suite = this.state.suite;
+        const caseIndex = suite && get(suite, "cases", []).findIndex(c => c.order === testCase.order)
+        suite.cases[caseIndex] = testCase;
 
-        this.props.getSuite(testCase.suite.id)
-            .then(_ => {
-                console.log('got suite about to update')
-                const suite = this.props.suite;
-                const caseIndex = suite && get(suite, "cases", []).findIndex(c => c.order === testCase.order)
-                
-                suite.cases[caseIndex] = testCase;
-                this.props.updateSuite(suite);
+        if (suite.title !== testCase.suite.title) {
+            suite.title = testCase.suite.title;
+            suite.cases = suite.cases.map(tCase => {
+                tCase.suite.title = suite.title;
+                return tCase;
             })
-        return false
-    }
-
-    updateNewSuiteIfNew(testCase) {
-        if (this.props.isNew) {
-            const form = this.props.getForm();
-            form.cases[0] = testCase;
-            form.title = get(testCase, 'suite.title') || form.title;
-            this.props.updateForm(form);
         }
-        return false;
+        this.props.updateSuite(suite);
     }
 
     render() {
-        const testCase = this.state.testCase;
+        const { testCase } = this.state;
         if (!testCase) return null;
         return (
             <div className="animated fadeIn">
@@ -147,21 +157,6 @@ class SingleCase extends Component {
                                 className="editable-label"
                                 style={{ width: `150px`}}
                             />
-                        </div>
-                        <div>
-                            <Button
-                                type="submit"
-                                size="md"
-                                color="primary"
-                                onClick={() => this.add()}
-                                className="btn-add-step"
-                            >Add Step</Button>
-                            {!this.props.isNew && <Button
-                                type="submit"
-                                size="md"
-                                color="primary"
-                                onClick={() => this.update()}
-                            >Update Case</Button>}
                         </div>
                     </div>
                     <hr/>

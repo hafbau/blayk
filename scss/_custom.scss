@@ -77,23 +77,6 @@ input, select, .form-control {
     padding: 0;
 }
 
-.test > .card {
-    margin: 0;
-    border: none;
-    border-top: 1px solid $gray-100;
-    min-width: 260px;
-}
-
-.test > .card:hover {
-    background-color: $gray-100;
-}
-
-.test .card-body {
-    display: flex;
-    align-items: center;
-    padding: 0;
-}
-
 .left {
     cursor: pointer;
     flex: 1;

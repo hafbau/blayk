@@ -8731,6 +8731,75 @@ hr.transparent {
   *[dir="rtl"].callout-dark {
     border-right-color: #29363d; }
 
+.app-header.navbar {
+  min-width: 320px; }
+  .app-header.navbar .navbar-nav {
+    width: 75%;
+    flex-direction: row-reverse; }
+  .app-header.navbar .navbar-brand {
+    width: 25%; }
+  .app-header.navbar .nav-item {
+    width: 33.3%; }
+
+.breadcrumb {
+  padding-left: 25%;
+  margin-bottom: 0; }
+
+.main > .container-fluid {
+  width: 50%;
+  max-width: 1500px;
+  padding: 1.5rem 0 0; }
+
+.content-head {
+  width: 100%;
+  padding: 0 1.5rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #869fac; }
+
+@media (max-width: 1024px) {
+  .breadcrumb {
+    padding-left: 1rem; }
+  .main > .container-fluid {
+    width: 100%;
+    min-width: 320px;
+    padding: 1rem; } }
+
+.test .content-drawer {
+  width: 90%;
+  margin: 0 auto;
+  background: #fff; }
+
+.test .content-drawer-head {
+  padding: 1rem;
+  width: 100%;
+  border-bottom: 1px solid #a4b7c1; }
+
+.test .content-drawer-body {
+  width: 100%;
+  padding: 1rem; }
+
+.test .content-drawer-body .card-body, .test .content-drawer-body .card-block {
+  box-shadow: 0 0px 2px #869fac;
+  margin: 1rem 0;
+  transition: all 0.4s ease-in; }
+
+.test .content-drawer-body .card-body:hover, .test .content-drawer-body .card-block:hover {
+  box-shadow: 0 0px 4px #869fac; }
+
+.test .card-body, .test .card-block {
+  position: relative;
+  box-shadow: 0 1px 4px #869fac;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  background-color: #fff; }
+
+.test .card {
+  box-shadow: 0 0 2px #869fac;
+  background-color: transparent;
+  border: none;
+  min-width: 260px; }
+
 .Profile-Panel-Tab-Pane .card-block {
   display: flex;
   flex-direction: column;
@@ -8919,20 +8988,6 @@ input, select, .form-control {
 
 .test {
   margin: 0;
-  padding: 0; }
-
-.test > .card {
-  margin: 0;
-  border: none;
-  border-top: 1px solid #f0f3f5;
-  min-width: 260px; }
-
-.test > .card:hover {
-  background-color: #f0f3f5; }
-
-.test .card-body, .test .card-block {
-  display: flex;
-  align-items: center;
   padding: 0; }
 
 .left {

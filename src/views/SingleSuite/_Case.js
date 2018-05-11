@@ -1,9 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import {
-    Card,
-    CardBlock,
-} from "reactstrap";
+import { CardBlock } from "reactstrap";
 
 import ScheduleModal from './_ScheduleModal';
 import deepClone from '../../utils/deep_clone';
@@ -62,38 +59,36 @@ export default class Case extends React.Component {
             pathname: `/tests/${suiteId}/cases/${testCase._id}/run`,
             state: { testCase, hasIssueService }
         }} />
+        
+        return (
+            <CardBlock className={`card-body`}>
+                <Link className="left" to={{
+                    pathname: `/tests/${suiteId}/cases/${testCase._id}`,
+                    state: { testCase }
+                }}>
+                    <i className="fa fa-file" aria-hidden="true"></i>
+                    <span className="test-name">{testCase.title}</span>
+                </Link>
+                <div className='right'>
+                    
+                    <i className="fa fa-play" aria-hidden="true" onClick={() => this.runCase()}></i>
 
-        return <li className="test">
-            <Card>
-                <CardBlock className={`card-body`}>
-                    <Link className="left" to={{
-                        pathname: `/tests/${suiteId}/cases/${testCase._id}`,
-                        state: { testCase }
-                    }}>
-                        <i className="fa fa-file" aria-hidden="true"></i>
-                        <span className="test-name">{testCase.title}</span>
-                    </Link>
-                    <div className='right'>
-                        
-                        <i className="fa fa-play" aria-hidden="true" onClick={() => this.runCase()}></i>
+                    <i className="fa fa-clock-o" aria-hidden="true" onClick={() => this.toggle()}></i>
 
-                        <i className="fa fa-clock-o" aria-hidden="true" onClick={() => this.toggle()}></i>
-
-                        <i className="fa fa-clone" aria-hidden="true" onClick={() => props.duplicateTestCase(testCase)}></i>
-                        <i className="fa fa-arrow-up" aria-hidden="true" onClick={() => props.move(testCase.order, -1)}></i>
-                        <i className="fa fa-arrow-down" aria-hidden="true" onClick={() => props.move(testCase.order, 1)}></i>
-                        <i className="fa fa-trash" aria-hidden="true" onClick={() => props.deleteTestCase(testCase.order)}></i>
-                    </div>
-                    <ScheduleModal
-                        isOpen={this.state.modal}
-                        toggle={e => this.toggle(e)}
-                        className={this.props.className}
-                        job={testCase.job}
-                        schedule={e => this.schedule(e)}
-                        handleChange={e => this.handleChange(e)}
-                    />
-                </CardBlock>
-            </Card>
-        </li>
+                    <i className="fa fa-clone" aria-hidden="true" onClick={() => props.duplicateTestCase(testCase)}></i>
+                    <i className="fa fa-arrow-up" aria-hidden="true" onClick={() => props.move(testCase.order, -1)}></i>
+                    <i className="fa fa-arrow-down" aria-hidden="true" onClick={() => props.move(testCase.order, 1)}></i>
+                    <i className="fa fa-trash" aria-hidden="true" onClick={() => props.deleteTestCase(testCase.order)}></i>
+                </div>
+                <ScheduleModal
+                    isOpen={this.state.modal}
+                    toggle={e => this.toggle(e)}
+                    className={this.props.className}
+                    job={testCase.job}
+                    schedule={e => this.schedule(e)}
+                    handleChange={e => this.handleChange(e)}
+                />
+            </CardBlock>
+        )
     }
 }

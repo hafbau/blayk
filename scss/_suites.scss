@@ -1,0 +1,45 @@
+.test {
+    .content-drawer {
+        width: 90%;
+        margin: 0 auto;
+        background: $white;
+    }
+
+    .content-drawer-head {
+        padding: $spacer;
+        width: 100%;
+        border-bottom: 1px solid $gray-300;
+    }
+
+    .content-drawer-body {
+        width: 100%;
+        padding: $spacer;
+    }
+
+    .content-drawer-body .card-body {
+        box-shadow: 0 0px 2px $gray-400;
+        margin: $spacer 0;
+        transition: all 0.4s ease-in;
+    }
+
+    .content-drawer-body .card-body:hover {
+        box-shadow: 0 0px 4px $gray-400;
+    }
+
+    .card-body {
+        position: relative;
+        box-shadow: 0 1px 4px $gray-400;
+        display: flex;
+        align-items: center;
+        padding: 0;
+        background-color: $white;
+    }
+
+    .card {
+        box-shadow: 0 0 2px $gray-400;
+        background-color: transparent;
+        border: none;
+        min-width: 260px;
+    }
+}
+

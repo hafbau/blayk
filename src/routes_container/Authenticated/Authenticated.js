@@ -10,7 +10,6 @@ import Footer from '../../components/Footer/';
 import Header from '../../components/Header/';
 import RunTest from '../../views/RunTest/';
 
-import Sidebar from '../../components/Sidebar/';
 import SingleCase from '../../views/SingleCase/';
 import SingleSuite from '../../views/SingleSuite/';
 
@@ -22,7 +21,6 @@ function AuthenticatedRoutes(props) {
       <div className="app">
         <Header {...props}/> 
         <div className="app-body">
-            <Sidebar {...props}/>
           <main className="main">
             <Breadcrumb />
             <Container fluid>
@@ -36,7 +34,7 @@ function AuthenticatedRoutes(props) {
 
                 <Route name="View Suite" exact path="/tests/:id" render={() => <SingleSuite {...props} />} />
 
-                <Route name="View Test Case" exact path="/tests/:suiteId/cases/:id" render={() => <SingleCase {...props} />} />
+                <Route name="View Test Case" exact path="/tests/:suiteId/cases/:id" component={SingleCase} />
                 <Route name="Run Test Case" exact path="/tests/:suiteId/cases/:id/run" render={() => <RunTest {...props} />} />
                 
                 <Route exact path="/" name="Home" render={() => <AllTests {...props} />}/>

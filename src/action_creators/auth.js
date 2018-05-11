@@ -45,10 +45,10 @@ export function logout() {
 
         })
         .catch(error => {
-            error = error.error || error;
             return dispatch({
-                ...failure,
-                error
+                ...resolved,
+                token: "",
+                user: {}
             })
         })
     }

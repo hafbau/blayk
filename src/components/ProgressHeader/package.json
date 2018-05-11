@@ -1,0 +1,6 @@
+{
+  "name": "ProgressHeader",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ProgressHeader.js"
+}
