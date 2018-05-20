@@ -15,10 +15,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
     action = { ...action }
-    console.log('action in reducer', action)
-    delete action.type;
     const payload = action.payload;
+    delete action.type;
     delete action.payload;
-
+    // Joins previous state, payload and anything else left in action
     return Object.assign({}, state, action, payload);
 }

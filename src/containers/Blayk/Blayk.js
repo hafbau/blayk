@@ -3,6 +3,7 @@ import React from 'react';
 import { logout, updateUser } from '../../action_creators/auth';
 import {
   createSuite,
+  deleteSuite,
   getAllSuites,
   getSuite,
   runCase,
@@ -56,7 +57,6 @@ class App extends React.PureComponent {
   }
   
   render() {
-    console.log("props in blayk", this.props)
     this.redirectIfLoggedInAndVisitingUnAuthenticatedRoute();
 
     return <div>
@@ -76,6 +76,7 @@ function mapDispatchToProps(dispatch) {
   return {
     createListener: bindActionCreators(createListener, dispatch),
     createSuite: bindActionCreators(createSuite, dispatch),
+    deleteSuite: bindActionCreators(deleteSuite, dispatch),
     getAllSuites: bindActionCreators(getAllSuites, dispatch),
     getSuite: bindActionCreators(getSuite, dispatch),
     logout: bindActionCreators(logout, dispatch),

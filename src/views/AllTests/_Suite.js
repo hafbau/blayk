@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
     Button,
@@ -11,7 +11,7 @@ import cuid from 'cuid';
 import deepClone from '../../utils/deep_clone';
 import { get, set } from '../../utils/resolve_object_path';
 
-class Suite extends PureComponent {
+class Suite extends React.Component {
     constructor(props) {
         super(props);
         const suite = Object.assign({},
@@ -28,12 +28,16 @@ class Suite extends PureComponent {
         )
         this.state = {
             showDetails: false,
-            suite, // TODO: fallback to go fetch it (componentWillMount) if not in location state e.g. when entered to the address bar directly
+            suite,
             hasIssueService: !!(suite.meta.jiraURL && suite.meta.jiraUsername && suite.meta.jiraPassword)
         }
     }
     componentWillReceiveProps({ suite }, nextState) {
-        this.setState(prevState => Object.assign({}, prevState, { suite }));
+        if (JSON.stringify(this.state.suite) !== JSON.stringify(suite)) this.setState(prevState => Object.assign({}, prevState, { suite }));
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return JSON.stringify(this.state) !== JSON.stringify(nextState);
     }
     deleteTestCase(order) {
         const suite = deepClone(this.state.suite);
@@ -43,8 +47,6 @@ class Suite extends PureComponent {
 
         suite.cases = newTestCases;
         this.props.updateSuite(suite);
-        // this.setState(prevState => Object.assign({}, prevState, { suite }));
-        return false;
     }
 
     duplicateTestCase(testCase) {
@@ -66,14 +68,11 @@ class Suite extends PureComponent {
 
         suite.cases.push(newTestCase)
         this.props.updateSuite(suite);
-        // this.setState(prevState => Object.assign({}, prevState, { suite }));
-        return false;
     }
 
     handleChange({ target: { name, value } }) {
         const suite = set(deepClone(this.state.suite), name, value);
         this.setState(prevState => Object.assign({}, prevState, { suite }));
-        return false;
     }
 
     move(order, increment) {
@@ -89,36 +88,32 @@ class Suite extends PureComponent {
                 return testCase;
             });
         }
-        this.setState(prevState => Object.assign({}, prevState, { suite }));
-        return false;
+        this.props.updateSuite(suite);
     }
 
-    update() {
-        if (typeof this.props.updateCase === 'function') this.props.updateCase(this.state.suite);
-        return false
-    }
-
-    toggleDetails() {
-        this.setState({ showDetails: !this.state.showDetails })
+    toggleDetails(e) {
+        e.preventDefault();
+        this.setState({ showDetails: !this.state.showDetails });
     }
     render() {
         const { runSuite, duplicateSuite, deleteSuite } = this.props;
-        const { hasIssueService, suite } = this.state;
-        console.log('props in _Suite', this.props);
-        return <li className="test">
+        const { hasIssueService, showDetails, suite } = this.state;
+        
+        return <li className="test" id={suite._id}>
             <Card>
                 <CardBlock className={`card-body`}>
-                    <Link className="left" to="#_" onClick={() => this.toggleDetails()}>
+                    <Link className="left" to="#_" onClick={(e) => this.toggleDetails(e)}>
                         <i className="fa fa-suitcase" aria-hidden="true"></i>
                         <span className="test-name">{suite.title}</span>
                     </Link>
                     <div className='right'>
-                        <i className="fa fa-play" aria-hidden="true" onClick={() => runSuite()}></i>
+                        {/* <i className="fa fa-play" aria-hidden="true" onClick={() => runSuite()}></i> */}
                         <i className="fa fa-clone" aria-hidden="true" onClick={() => duplicateSuite(suite)}></i>
                         <i className="fa fa-trash" aria-hidden="true" onClick={() => deleteSuite(suite)}></i>
                     </div>
                 </CardBlock>
-                {<div className="content-drawer" style={{ display: this.state.showDetails ? "block" : "none" }}>
+
+                {showDetails && <div className="content-drawer">
                     <div className="content-drawer-head">
                         <Link className="left" to={`/tests/${suite._id}/cases/new`}>
                             <Button>+ Add</Button>

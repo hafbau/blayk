@@ -1,20 +1,24 @@
 import testApi from "../api/test";
 import { resolved, pending, failure } from "./helpers";
+import deep_clone from "../utils/deep_clone";
 
-export function createSuite(body, token) {
-    return function(dispatch) {
+export function createSuite(body) {
+    return function (dispatch, getState) {
+        const { suites, token } = getState();
         dispatch(pending);
-
         return testApi.createSuite(body, token)
-            .then(({ body: { suite } }) => {
+        .then(({ body: { suite } }) => {
+            // used for cloning the array
+            const clonedSuites = suites.map(s => s);
+            clonedSuites.push(suite);
             dispatch({
                 ...resolved,
-                suite,
+                suites: clonedSuites,
                 success: { message: "Test suite created successfully."}
             });
 
         })
-        .catch(error => {
+            .catch(error => {
             error = error.error || error;
             return dispatch({
                 ...failure,
@@ -55,6 +59,27 @@ export function getSuite(_id, token) {
             dispatch({
                 ...resolved,
                 suite
+            });
+
+        })
+        .catch(error => {
+            error = error.error || error;
+            return dispatch({
+                ...failure,
+                error
+            })
+        })
+    }
+}
+export function deleteSuite(suite, token) {
+    return function(dispatch, getState) {
+        dispatch(pending);
+        const { suites, token } = getState();
+        return testApi.deleteSuite(suite, token)
+        .then(_ => {
+            dispatch({
+                ...resolved,
+                suites: suites.filter(s => suite._id !== s._id)
             });
 
         })
@@ -123,13 +148,15 @@ export function scheduleRun({ body, suiteId, order }) {
 export function updateSuite(body) {
     return function(dispatch, getState) {
         dispatch(pending);
-
-        return testApi.updateSuite(body, getState().token)
+        const { suites, token } = getState();
+        
+        return testApi.updateSuite(body, token)
         .then(({ body: { suite } }) => {
+            
             dispatch({
                 ...resolved,
                 success: { message: "Test suite successfully updated." },
-                suite
+                suites: suites.map(s => s._id === suite._id ? suite : s)
             });
 
         })
@@ -156,29 +183,6 @@ export function saveAndRun(body, token) {
                 ...resolved,
                 results: body,
                 success: { message: "Test case successfully saved and ran." }
-            });
-
-        })
-        .catch(error => {
-            error = error.error || error;
-            dispatch({
-                ...failure,
-                error
-            })
-        })
-    }
-}
-
-export function updateCase(body) {
-    return function(dispatch, getState) {
-        dispatch(pending);
-
-        return testApi.updateCase(body, getState().token)
-        .then(({ body }) => {
-            dispatch({
-                ...resolved,
-                success: { message: "Test case updated successfully." },
-                testCase: body
             });
 
         })

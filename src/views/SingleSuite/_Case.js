@@ -17,8 +17,6 @@ export default class Case extends React.Component {
                 schDays: this.props.job ? this.props.job.days : '',
             }
         };
-
-        this.toggle = this.toggle.bind(this);
     }
 
     handleChange({ target: { name, value } }) {
@@ -42,10 +40,10 @@ export default class Case extends React.Component {
             suiteId: this.props.suiteId,
             order: this.props.testCase.order
         })
-        .then(_ => this.toggle());
+        .then(_ => this.toggleModal());
     }
 
-    toggle() {
+    toggleModal() {
         this.setState({
             modal: !this.state.modal
         });
@@ -73,7 +71,7 @@ export default class Case extends React.Component {
                     
                     <i className="fa fa-play" aria-hidden="true" onClick={() => this.runCase()}></i>
 
-                    <i className="fa fa-clock-o" aria-hidden="true" onClick={() => this.toggle()}></i>
+                    <i className="fa fa-clock-o" aria-hidden="true" onClick={() => this.toggleModal()}></i>
 
                     <i className="fa fa-clone" aria-hidden="true" onClick={() => props.duplicateTestCase(testCase)}></i>
                     <i className="fa fa-arrow-up" aria-hidden="true" onClick={() => props.move(testCase.order, -1)}></i>
@@ -82,7 +80,7 @@ export default class Case extends React.Component {
                 </div>
                 <ScheduleModal
                     isOpen={this.state.modal}
-                    toggle={e => this.toggle(e)}
+                    toggle={e => this.toggleModal(e)}
                     className={this.props.className}
                     job={testCase.job}
                     schedule={e => this.schedule(e)}

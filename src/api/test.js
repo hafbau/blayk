@@ -57,5 +57,12 @@ export default {
             .type('json')
             .set('x-access-token', token)
             .set('Content-Type', 'application/json');
+    },
+
+    deleteSuite(body, token) {
+        return fetch.delete(`${config.API_PATH}/tests/${body._id}`)
+            .type('json')
+            .set('x-access-token', token)
+            .set('Content-Type', 'application/json');
     }
 };

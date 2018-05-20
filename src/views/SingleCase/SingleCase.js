@@ -1,4 +1,21 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { logout, updateUser } from '../../action_creators/auth';
+import {
+  createSuite,
+  getAllSuites,
+  getSuite,
+  runCase,
+  scheduleRun,
+  saveAndRun,
+  updateSuite
+} from '../../action_creators/test';
+import { fetchProjects, saveIssue } from '../../action_creators/external'
+
+import { createListener } from '../../listeners';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import {
     Button,
     Col,
@@ -9,48 +26,26 @@ import {
 
 import cuid from 'cuid';
 import Step from './_Step';
+import Page500 from '../Page500';
 import deepClone from '../../utils/deep_clone';
 import { set, get } from '../../utils/resolve_object_path';
 
 class SingleCase extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            testCase: this.getState()
-        };
+        this.state = {};
     }
-    
-    addStep() {
-        const testCase = deepClone(this.state.testCase);
-        const newStep = {
-            order: testCase.steps.length + 1,
-            options: {},
-            target: {},
-        }
-        
-        testCase.steps.push(newStep);
-        this.setState(prevState => Object.assign({}, prevState, { testCase }));
-    }
-    
-    deleteStep(order) {
-        const testCase = deepClone(this.state.testCase);
-        const newSteps = testCase.steps
-        .filter(s => s.order !== order)
-        .map(s => s.order > order ? s.order-- && s : s);
-        
-        testCase.steps = newSteps;
-        this.setState(prevState => Object.assign({}, prevState, { testCase }));
-    }
-    
-    duplicateStep(step) {
-        const testCase = deepClone(this.state.testCase);
-        const newStep = Object.assign({}, deepClone(step), { order: testCase.steps.length + 1 });
-        
-        testCase.steps.push(newStep)
-        this.setState(prevState => Object.assign({}, prevState, { testCase }));
+    componentWillMount() {
+        if (!this.props.suites) this.props.getAllSuites();
+        this.getState();
     }
 
-    getState() {
+    componentWillReceiveProps(nextProps) {
+        const { suite, testCase } = this.state;
+        if (!suite || !testCase) this.getState(nextProps);
+    }
+
+    getState(props = this.props) {
         let testCase = {
             title: '',
             steps: [{
@@ -61,8 +56,10 @@ class SingleCase extends Component {
             order: 1,
             suite: {}
         };
-        const { isNew, match, suites } = this.props;
+      
+        const { match, suites } = props;
         const { id, suiteId } = match.params;
+        const isNew = !(id && suiteId);
         let suite = suites.find(s => s._id === suiteId);
 
         if (!isNew && id && suite) {
@@ -73,17 +70,55 @@ class SingleCase extends Component {
             )
             else testCase = suite.cases.find(c => c._id === id)
         } else suite = {
-            userId: this.props.user && this.props.user._id,
+            userId: props.user && props.user._id,
             meta: {
-                slack: this.props.user && this.props.user.slack,
-                jira: this.props.user && this.props.user.jira,
-                pipeline: this.props.user && this.props.user.pipeline,
+                slack: props.user && props.user.slack,
+                jira: props.user && props.user.jira,
+                pipeline: props.user && props.user.pipeline,
             },
             title: '',
             cases: []
         };
         
-        return { suite, testCase };
+        this.setState(prevState => Object.assign({}, prevState, { suite, testCase, isNew }));
+    }
+
+    addStep() {
+        const testCase = deepClone(this.state.testCase);
+        const newStep = {
+            order: testCase.steps.length + 1,
+            options: {},
+            target: {},
+        }
+
+        testCase.steps.push(newStep);
+        this.setState(prevState => Object.assign({}, prevState, {
+            testCase
+        }));
+    }
+
+    deleteStep(order) {
+        const testCase = deepClone(this.state.testCase);
+        const newSteps = testCase.steps
+            .filter(s => s.order !== order)
+            .map(s => s.order > order ? s.order-- && s : s);
+
+        testCase.steps = newSteps;
+        this.setState(prevState => Object.assign({}, prevState, {
+            testCase
+        }));
+    }
+
+    duplicateStep(step) {
+        const testCase = deepClone(this.state.testCase);
+        const newStep = Object.assign({}, deepClone(step), {
+            order: testCase.steps.length + 1
+        });
+
+        testCase.steps.push(newStep)
+        this.setState(prevState => Object.assign({}, prevState, {
+            testCase
+        }));
     }
     
     handleChange({ target: { name, value } }) {
@@ -108,27 +143,33 @@ class SingleCase extends Component {
         this.setState(prevState => Object.assign({}, prevState, { testCase }));
     }
 
-    update() {
-        const testCase = this.state.testCase;
-        const suite = this.state.suite;
-        const caseIndex = suite && get(suite, "cases", []).findIndex(c => c.order === testCase.order)
-        suite.cases[caseIndex] = testCase;
+    save() {
+        const { isNew, suite, testCase } = this.state;
+        if (suite) {
+            const caseIndex = isNew ? 0 : get(suite, "cases", []).findIndex(c => c.order === testCase.order)
+            suite.cases[caseIndex] = testCase;
 
-        if (suite.title !== testCase.suite.title) {
-            suite.title = testCase.suite.title;
-            suite.cases = suite.cases.map(tCase => {
-                tCase.suite.title = suite.title;
-                return tCase;
-            })
+            if (suite.title !== testCase.suite.title) {
+                suite.title = testCase.suite.title;
+                suite.cases = suite.cases.map(tCase => {
+                    tCase.suite.title = suite.title;
+                    return tCase;
+                })
+            }
+
+            if (isNew) this.props.createSuite(suite)
+            else this.props.updateSuite(suite);
         }
-        this.props.updateSuite(suite);
+        this.setState(prevState => Object.assign({}, prevState, { redirectToTests: true }));
     }
 
     render() {
-        const { testCase } = this.state;
-        if (!testCase) return null;
+        const { redirectToTests, suite, testCase } = this.state;
+        if (redirectToTests) return <Redirect to={`/tests#${suite ? suite._id : "_"}`} />
+        if (!testCase) return <Page500 />;
+        
         return (
-            <div className="animated fadeIn">
+            <form className="animated fadeIn" >
                 <header>
                     <div className="single-case-header" style={{ display: 'flex' }}>
                         <div>
@@ -176,25 +217,47 @@ class SingleCase extends Component {
                     </Col>
                 </Row>
 
-                {!this.props.isNew && <footer style={{ padding: '1.25rem 0', marginBottom: '2.5rem' }}>
+                <footer style={{ padding: '1.25rem 0', marginBottom: '2.5rem' }}>
                     <Button
-                    type="submit"
+                    type="button"
                     size="md"
                     color="primary"
-                    onClick={() => this.add()}    
+                    onClick={() => this.addStep()}    
                     >Add Step</Button>
                     <Button
                     className=""
                     type="submit"
                     size="md"
                     color="primary"
-                    onClick={() => this.update()}
+                    onClick={() => this.save()}
                     style={{ marginLeft: '1.5rem' }}    
-                    >Update Case</Button>
-                </footer>}
-            </div>
+                    >{this.state.isNew ? "Create" : "Update"}</Button>
+                </footer>
+            </form>
         )
     }
 }
 
-export default SingleCase;
+function mapStateToProps(state, ownProps) {
+    return { ...state }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        createListener: bindActionCreators(createListener, dispatch),
+        createSuite: bindActionCreators(createSuite, dispatch),
+        getAllSuites: bindActionCreators(getAllSuites, dispatch),
+        getSuite: bindActionCreators(getSuite, dispatch),
+        logout: bindActionCreators(logout, dispatch),
+        runCase: bindActionCreators(runCase, dispatch),
+        scheduleRun: bindActionCreators(scheduleRun, dispatch),
+        saveAndRun: bindActionCreators(saveAndRun, dispatch),
+        updateSuite: bindActionCreators(updateSuite, dispatch),
+        updateUser: bindActionCreators(updateUser, dispatch),
+        fetchProjects: bindActionCreators(fetchProjects, dispatch),
+        saveIssue: bindActionCreators(saveIssue, dispatch),
+    };
+}
+
+const SingleCaseConnected = connect(mapStateToProps, mapDispatchToProps)(SingleCase);
+export default SingleCaseConnected;

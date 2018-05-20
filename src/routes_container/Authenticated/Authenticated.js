@@ -26,16 +26,14 @@ function AuthenticatedRoutes(props) {
             <Container fluid>
               <Switch>
 
-                <Route path="/profile" name="Create Test" render={() => <Profile {...props} />} />
-
-                <Route path="/new" name="Create Test" render={() => <CreateTest {...props} />} />
+                <Route path="/profile" name="Profile" render={() => <Profile {...props} />} />
 
                 <Route name="All Tests" exact path="/tests" render={() => <AllTests {...props} />} />
 
-                <Route name="View Suite" exact path="/tests/:id" render={() => <SingleSuite {...props} />} />
-
-                <Route name="View Test Case" exact path="/tests/:suiteId/cases/:id" component={SingleCase} />
                 <Route name="Run Test Case" exact path="/tests/:suiteId/cases/:id/run" render={() => <RunTest {...props} />} />
+                <Route name="View" exact path="/tests/:suiteId/cases/:id" component={SingleCase} />
+                <Route name="View" exact path="/tests/new" component={SingleCase} />
+
                 
                 <Route exact path="/" name="Home" render={() => <AllTests {...props} />}/>
                 <Route render={() => <Page404 {...props} />}/>
